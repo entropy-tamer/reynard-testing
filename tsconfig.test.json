@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": ["vitest/globals", "solid-js"]
+  },
+  "include": [
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/test-setup.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": ["dist", "node_modules"]
+}
