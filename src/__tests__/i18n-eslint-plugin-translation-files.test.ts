@@ -495,3 +495,4 @@ describe("i18n ESLint Plugin - Translation File Detection", () => {
     });
   });
 });
+export {};

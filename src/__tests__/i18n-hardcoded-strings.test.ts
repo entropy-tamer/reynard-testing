@@ -34,11 +34,12 @@ describe("Hardcoded String Detection", () => {
           `,
           errors: [
             {
-              message: 'Hardcoded string found: "Welcome to our app". Consider using i18n.t(\'welcome.to.our.app\') instead.',
+              message:
+                "Hardcoded string found: \"Welcome to our app\". Consider using i18n.t('welcome.to.our.app') instead.",
               type: "Literal",
-              },
+            },
           ],
-          },
+        },
         {
           code: `
           function Component() {
@@ -52,17 +53,18 @@ describe("Hardcoded String Detection", () => {
           `,
           errors: [
             {
-              message: 'Hardcoded string found: "Hello World". Consider using i18n.t(\'hello.world\') instead.',
+              message: "Hardcoded string found: \"Hello World\". Consider using i18n.t('hello.world') instead.",
               type: "Literal",
-              },
+            },
             {
-              message: 'Hardcoded string found: "This is a test message". Consider using i18n.t(\'this.is.a.test.message\') instead.',
+              message:
+                "Hardcoded string found: \"This is a test message\". Consider using i18n.t('this.is.a.test.message') instead.",
               type: "Literal",
-              },
+            },
           ],
-          },
+        },
       ],
-      invalid: []
+      invalid: [],
     });
   });
 
@@ -77,17 +79,17 @@ describe("Hardcoded String Detection", () => {
           `,
           errors: [
             {
-              message: 'Hardcoded string found: "App Title". Consider using i18n.t(\'app.title\') instead.',
+              message: "Hardcoded string found: \"App Title\". Consider using i18n.t('app.title') instead.",
               type: "Literal",
-              },
+            },
             {
-              message: 'Hardcoded string found: "App Description". Consider using i18n.t(\'app.description\') instead.',
+              message: "Hardcoded string found: \"App Description\". Consider using i18n.t('app.description') instead.",
               type: "Literal",
-              },
+            },
           ],
-          },
+        },
       ],
-      invalid: []
+      invalid: [],
     });
   });
 
@@ -104,17 +106,17 @@ describe("Hardcoded String Detection", () => {
           `,
           errors: [
             {
-              message: 'Hardcoded string found: "Error occurred". Consider using i18n.t(\'error.occurred\') instead.',
+              message: "Hardcoded string found: \"Error occurred\". Consider using i18n.t('error.occurred') instead.",
               type: "Literal",
-              },
+            },
             {
-              message: 'Hardcoded string found: "Debug message". Consider using i18n.t(\'debug.message\') instead.',
+              message: "Hardcoded string found: \"Debug message\". Consider using i18n.t('debug.message') instead.",
               type: "Literal",
-              },
+            },
           ],
-          },
+        },
       ],
-      invalid: []
+      invalid: [],
     });
   });
 
@@ -132,23 +134,21 @@ describe("Hardcoded String Detection", () => {
           `,
           errors: [
             {
-              message: 'Hardcoded string found: "Home". Consider using i18n.t(\'home\') instead.',
+              message: "Hardcoded string found: \"Home\". Consider using i18n.t('home') instead.",
               type: "Literal",
-              },
+            },
             {
-              message: 'Hardcoded string found: "About". Consider using i18n.t(\'about\') instead.',
+              message: "Hardcoded string found: \"About\". Consider using i18n.t('about') instead.",
               type: "Literal",
-              },
+            },
             {
-              message: 'Hardcoded string found: "Contact". Consider using i18n.t(\'contact\') instead.',
+              message: "Hardcoded string found: \"Contact\". Consider using i18n.t('contact') instead.",
               type: "Literal",
-              },
+            },
           ],
-          },
+        },
       ],
-      invalid: []
+      invalid: [],
     });
   });
-  },
 });
-

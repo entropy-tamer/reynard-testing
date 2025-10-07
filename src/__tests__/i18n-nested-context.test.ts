@@ -48,9 +48,9 @@ describe("Nested Context Detection", () => {
             }
           };
           `,
-          },
+        },
       ],
-      invalid: []
+      invalid: [],
     });
   });
 
@@ -75,9 +75,9 @@ describe("Nested Context Detection", () => {
             );
           }
           `,
-          },
+        },
       ],
-      invalid: []
+      invalid: [],
     });
   });
 
@@ -97,9 +97,9 @@ describe("Nested Context Detection", () => {
             return result;
           }
           `,
-          },
+        },
       ],
-      invalid: []
+      invalid: [],
     });
   });
 
@@ -127,10 +127,9 @@ describe("Nested Context Detection", () => {
             }
           ];
           `,
-          },
+        },
       ],
-      invalid: []
+      invalid: [],
     });
   });
-  },
 });

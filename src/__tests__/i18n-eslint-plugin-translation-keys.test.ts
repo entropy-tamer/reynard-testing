@@ -33,16 +33,16 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
               {
                 message: 'Translation key "common.welcome" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
           {
             code: 'const title = t("nav.home");',
             errors: [
               {
                 message: 'Translation key "nav.home" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
           },
         ],
@@ -64,9 +64,9 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
               {
                 message: 'Translation key "welcome.title" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
         ],
       });
     });
@@ -88,21 +88,21 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
               {
                 message: 'Translation key "common.welcome" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "common.goodbye" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "errors.generic" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
         ],
       });
-      });
     });
+  });
 
   describe("Translation Key Patterns", () => {
     it("should handle various translation key formats", () => {
@@ -126,39 +126,39 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
               {
                 message: 'Translation key "common.save" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "common.cancel" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "nav.home" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "nav.about" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "errors.validation.required" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message:
                   'Translation key "errors.validation.email.invalid" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "forms.user.name.label" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message:
                   'Translation key "forms.user.email.placeholder" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
         ],
       });
     });
@@ -175,10 +175,10 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
           const message = t(key);
           `,
         ],
-      invalid: []
-    });
+        invalid: [],
       });
     });
+  });
 
   describe("Real-World Translation Usage", () => {
     it("should handle component translation patterns", () => {
@@ -200,9 +200,9 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
               {
                 message: 'Translation key "buttons." should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
         ],
       });
     });
@@ -232,13 +232,13 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
               {
                 message: 'Translation key "validation.required" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "validation.email.invalid" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
         ],
       });
     });
@@ -268,25 +268,25 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
               {
                 message: 'Translation key "errors.network.connection" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "errors.validation.generic" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "errors.auth.unauthorized" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "errors.generic" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
         ],
       });
-      });
     });
+  });
 
   describe("Translation Key Configuration", () => {
     it("should respect custom translation file patterns", () => {
@@ -298,15 +298,15 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
             options: [
               {
                 translationFiles: ["src/lang/**/*.ts", "packages/*/src/lang/**/*.ts"],
-                },
+              },
             ],
             errors: [
               {
                 message: 'Translation key "common.welcome" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
         ],
       });
     });
@@ -324,19 +324,19 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
                   "packages/*/src/translations/**/*.ts",
                   "locales/**/*.json",
                 ],
-                },
+              },
             ],
             errors: [
               {
                 message: 'Translation key "common.welcome" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
         ],
       });
-      });
     });
+  });
 
   describe("Edge Cases for Translation Keys", () => {
     it("should handle complex translation key structures", () => {
@@ -362,29 +362,29 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
               {
                 message: 'Translation key "user.profile.title" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "user.settings.notifications" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "user.preferences.theme" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "admin.dashboard.overview" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "admin.users.list" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "admin.reports.monthly" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
         ],
       });
     });
@@ -413,21 +413,21 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
               {
                 message: 'Translation key "status.loading" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "status.success" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "status.error" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
               {
                 message: 'Translation key "status.unknown" should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
         ],
       });
     });
@@ -454,11 +454,10 @@ describe("i18n ESLint Plugin - Translation Key Validation", () => {
               {
                 message: 'Translation key "menu." should be validated against translation files.',
                 type: "Literal",
-                },
+              },
             ],
-            },
+          },
         ],
-      });
       });
     });
   });
