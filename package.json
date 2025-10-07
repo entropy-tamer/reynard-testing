@@ -83,7 +83,7 @@
     "@solidjs/testing-library": "0.8.10",
     "@testing-library/user-event": "14.6.1",
     "commander": "14.0.1",
-    "reynard-i18n": "^0.39.0",
+    "reynard-i18n": "^0.43.0",
     "solid-js": "1.9.9"
   },
   "devDependencies": {
