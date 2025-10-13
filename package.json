@@ -83,18 +83,18 @@
     "@solidjs/testing-library": "0.8.10",
     "@testing-library/user-event": "14.6.1",
     "commander": "14.0.1",
-    "reynard-i18n": "^0.43.0",
+    "reynard-i18n": "^0.44.0",
     "solid-js": "1.9.9"
   },
   "devDependencies": {
     "@types/eslint": "9.6.1",
-    "@types/node": "24.7.0",
+    "@types/node": "24.7.1",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
     "@typescript-eslint/parser": "^8.44.1",
     "@vitest/coverage-v8": "3.2.4",
     "@vitest/ui": "3.2.4",
     "eslint": "^9.36.0",
-    "happy-dom": "19.0.2",
+    "happy-dom": "20.0.0",
     "tsx": "4.20.6",
     "typescript": "5.9.3",
     "vite": "7.1.9",
@@ -108,12 +108,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/RuneClaw17/reynard-testing",
+  "homepage": "https://github.com/entropy-tamer/reynard-testing",
   "bugs": {
-    "url": "https://github.com/RuneClaw17/reynard-testing/issues"
+    "url": "https://github.com/entropy-tamer/reynard-testing/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/RuneClaw17/reynard-testing.git"
+    "url": "https://github.com/entropy-tamer/reynard-testing.git"
   }
 }
