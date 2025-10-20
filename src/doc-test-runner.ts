@@ -5,9 +5,9 @@
  */
 
 import { execSync } from "child_process";
-import { writeFileSync, existsSync } from "fs";
-import { join, dirname } from "path";
-import { createDocTestFile, validateDocExamples, generateDocTestReport } from "./doc-tests/index";
+import { existsSync, writeFileSync } from "fs";
+import { dirname, join } from "path";
+import { createDocTestFile, generateDocTestReport, validateDocExamples } from "./doc-tests/index";
 
 export interface PackageConfig {
   name: string;
@@ -67,8 +67,8 @@ export const PACKAGES: PackageConfig[] = [
   },
   {
     name: "reynard-algorithms",
-    path: "packages/algorithms",
-    docPath: "packages/algorithms/README.md",
+    path: "packages/core/algorithms",
+    docPath: "packages/core/algorithms/README.md",
     setup: `
       import { UnionFind, checkCollision, SpatialHash, PerformanceTimer } from 'reynard-algorithms';
     `,
@@ -85,6 +85,8 @@ export const PACKAGES: PackageConfig[] = [
 
 /**
  * Generate documentation test files for all packages
+ * @param rootPath
+ * @example
  */
 export function generateAllDocTests(rootPath: string = process.cwd()) {
   console.log("🦊 Generating documentation test files...");
@@ -114,6 +116,8 @@ export function generateAllDocTests(rootPath: string = process.cwd()) {
 
 /**
  * Validate all documentation examples
+ * @param rootPath
+ * @example
  */
 export function validateAllDocs(rootPath: string = process.cwd()) {
   console.log("🦦 Validating documentation examples...");
@@ -171,6 +175,9 @@ ${
 
 /**
  * Run documentation tests for a specific package
+ * @param packageName
+ * @param rootPath
+ * @example
  */
 export function runPackageDocTests(packageName: string, rootPath: string = process.cwd()) {
   const pkg = PACKAGES.find(p => p.name === packageName);
@@ -196,6 +203,8 @@ export function runPackageDocTests(packageName: string, rootPath: string = proce
 
 /**
  * Run documentation tests for all packages
+ * @param rootPath
+ * @example
  */
 export function runAllDocTests(rootPath: string = process.cwd()) {
   console.log("🐺 Running documentation tests for all packages...");
@@ -245,6 +254,7 @@ export function runAllDocTests(rootPath: string = process.cwd()) {
 
 /**
  * CLI interface
+ * @example
  */
 export function main() {
   const args = process.argv.slice(2);

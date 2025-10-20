@@ -8,7 +8,7 @@ import type { PackageI18nConfig } from "../types.js";
 export const disabledPackages: PackageI18nConfig[] = [
   {
     name: "algorithms",
-    path: "packages/algorithms",
+    path: "packages/core/algorithms",
     enabled: false, // Algorithms package likely doesn't need i18n
     ignorePatterns: [],
     failOnHardcodedStrings: false,

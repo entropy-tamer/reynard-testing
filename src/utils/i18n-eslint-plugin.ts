@@ -108,15 +108,36 @@ export const i18nRules: Record<string, Rule.RuleModule> = {
               items: { type: "string" },
               default: ["src/lang/**/*.ts"],
             },
+            strictMode: {
+              type: "boolean",
+              default: false,
+            },
+            enabled: {
+              type: "boolean",
+              default: false,
+            },
           },
           additionalProperties: false,
         },
       ],
     },
     create(context: any) {
-      // const options = context.options[0] || {};
-      // const _translationFiles = options.translationFiles || ["src/lang/**/*.ts"];
-
+      const options = context.options[0] || {};
+      const enabled = options.enabled || false;
+      
+      // For now, this rule is disabled by default until proper translation validation is implemented
+      // This prevents false positives while the translation loading system is being developed
+      if (!enabled) {
+        return {};
+      }
+      
+      // TODO: Implement proper translation key validation
+      // This would involve:
+      // 1. Loading translation files from the configured paths
+      // 2. Parsing the translation objects
+      // 3. Validating that keys exist in the loaded translations
+      // 4. Reporting missing keys
+      
       return {
         CallExpression(node: any) {
           if (
@@ -126,11 +147,10 @@ export const i18nRules: Record<string, Rule.RuleModule> = {
           ) {
             const key = node.arguments[0];
             if (key && key.type === "Literal" && typeof key.value === "string") {
-              // This would check against actual translation files
-              // For now, just report as a warning
+              // Placeholder implementation - would validate against actual translation files
               context.report({
                 node: key,
-                message: `Translation key "${key.value}" should be validated against translation files.`,
+                message: `Translation key validation is not yet implemented. Key: "${key.value}"`,
               });
             }
           }
