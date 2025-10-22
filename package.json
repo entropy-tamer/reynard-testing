@@ -81,7 +81,7 @@
     "description": "ESLint plugin for i18n testing and hardcoded string detection"
   },
   "dependencies": {
-    "@entropy-tamer/reynard-i18n": "^0.44.0",
+    "@entropy-tamer/reynard-i18n": "^0.44.1",
     "@solidjs/testing-library": "0.8.10",
     "@testing-library/user-event": "14.6.1",
     "commander": "14.0.1",
