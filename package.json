@@ -1,7 +1,7 @@
 {
-  "name": "@entropy-tamer/reynard-testing",
+  "name": "reynard-testing",
   "version": "0.2.0",
-  "description": "Unified testing framework for Reynard packages",
+  "description": "Testing utilities and configurations for Reynard",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -72,13 +72,7 @@
   "keywords": [
     "testing",
     "vitest",
-    "solidjs",
-    "reynard",
-    "test-utils",
-    "mocks",
-    "fixtures",
-    "eslint-plugin",
-    "i18n"
+    "typescript"
   ],
   "author": "Balazs Horvath",
   "license": "MIT",
@@ -87,7 +81,7 @@
     "description": "ESLint plugin for i18n testing and hardcoded string detection"
   },
   "dependencies": {
-    "@entropy-tamer/reynard-i18n": "workspace:*",
+    "@entropy-tamer/reynard-i18n": "^0.44.0",
     "@solidjs/testing-library": "0.8.10",
     "@testing-library/user-event": "14.6.1",
     "commander": "14.0.1",
@@ -118,5 +112,11 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "homepage": "https://github.com/entropy-tamer/reynard-testing",
+  "bugs": "https://github.com/entropy-tamer/reynard-testing/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/entropy-tamer/reynard-testing.git"
   }
 }
