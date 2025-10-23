@@ -34,7 +34,7 @@ describe("Already Internationalized Code", () => {
         },
         {
           code: `
-          import { t } from "reynard-i18n";
+          import { t } from "@entropy-tamer/reynard-i18n";
           const greeting = t("greetings.hello");
           `,
         },

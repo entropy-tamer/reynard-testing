@@ -69,7 +69,7 @@ describe("i18n ESLint Plugin - Real-World Examples", () => {
           valid: [
             `
           import { Component } from "solid-js";
-          import { useI18n } from "reynard-themes";
+          import { useI18n } from "@entropy-tamer/reynard-themes";
           
           const TranslationDemo: Component = () => {
             const { t } = useI18n();
@@ -303,7 +303,7 @@ describe("i18n ESLint Plugin - Real-World Examples", () => {
                     valid: [
                       `
           import { Component } from "solid-js";
-          import { useI18n } from "reynard-themes";
+          import { useI18n } from "@entropy-tamer/reynard-themes";
           
           const MyComponent: Component = () => {
             const { t } = useI18n();

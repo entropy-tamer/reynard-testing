@@ -143,7 +143,7 @@ describe("Integration with Existing Test Suites", () => {
     // Example of how to integrate i18n testing with existing component tests
     const componentCode = `
       import { Component } from 'solid-js';
-      import { useI18n } from 'reynard-i18n';
+      import { useI18n } from '@entropy-tamer/reynard-i18n';
       
       export function LocalizedComponent() {
         const { t } = useI18n();
@@ -177,7 +177,7 @@ describe("Integration with Existing Test Suites", () => {
   it("should work with pluralization tests", () => {
     // Example of how to test pluralization
     const pluralizationCode = `
-      import { useI18n } from 'reynard-i18n';
+      import { useI18n } from '@entropy-tamer/reynard-i18n';
       
       export function ItemList({ count }: { count: number }) {
         const { t } = useI18n();

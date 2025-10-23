@@ -30,8 +30,8 @@ describe("i18n ESLint Plugin - AST Parsing", () => {
           'import { Command } from "commander";',
           'import { Component } from "solid-js";',
           'import { createSignal } from "solid-js";',
-          'import { useI18n } from "reynard-themes";',
-          'import { ToolRegistry, ToolExecutor } from "reynard-tools";',
+          'import { useI18n } from "@entropy-tamer/reynard-themes";',
+          'import { ToolRegistry, ToolExecutor } from "@entropy-tamer/reynard-tools";',
         ],
         invalid: [],
       });

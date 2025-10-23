@@ -359,7 +359,7 @@ export async function validateTranslations(config: I18nTestConfig): Promise<Tran
 async function loadTranslations(locale: string): Promise<Record<string, unknown>> {
   // This would integrate with the actual reynard-i18n package
   try {
-    const module = await import(`reynard-i18n/src/lang/${locale}/common.ts`);
+    const module = await import(`@entropy-tamer/reynard-i18n/src/lang/${locale}/common.ts`);
     return module.commonTranslations || {};
   } catch {
     return {};
