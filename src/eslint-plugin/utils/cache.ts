@@ -30,8 +30,8 @@ export class RuleCache<T> {
     this.maxSize = options.maxSize || 1000; // 1000 entries default
     this.cleanupInterval = options.cleanupInterval || 30000; // 30 seconds default
 
-    // Start cleanup timer
-    this.startCleanupTimer();
+    // Don't start cleanup timer for ESLint rules to avoid hanging
+    // this.startCleanupTimer();
   }
 
   /**
@@ -50,6 +50,11 @@ export class RuleCache<T> {
     if (Date.now() - entry.timestamp > entry.ttl) {
       this.cache.delete(key);
       return undefined;
+    }
+
+    // Manual cleanup check to prevent memory leaks
+    if (this.cache.size > this.maxSize) {
+      this.cleanup();
     }
 
     return entry.value;

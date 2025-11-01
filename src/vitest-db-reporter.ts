@@ -103,7 +103,7 @@ export class VitestDBReporter implements Reporter {
     }, 1000);
   }
 
-  onInit(vitest: any) {
+  onInit(_vitest: any) {
     console.log("🦦 Vitest DB Reporter initialized");
   }
 
@@ -220,29 +220,6 @@ export class VitestDBReporter implements Reporter {
     return `vitest_${timestamp}_${random}`;
   }
 
-  private countTests(files: File[]): number {
-    let count = 0;
-    for (const file of files) {
-      for (const task of file.tasks) {
-        count += this.countTestsInTask(task);
-      }
-    }
-    return count;
-  }
-
-  private countTestsInTask(task: RunnerTask): number {
-    if (task.type === "test") {
-      return 1;
-    }
-    if (task.type === "suite") {
-      let count = 0;
-      for (const child of task.tasks) {
-        count += this.countTestsInTask(child);
-      }
-      return count;
-    }
-    return 0;
-  }
 
   private calculateStats(files: File[]): { passed: number; failed: number; skipped: number } {
     let passed = 0;

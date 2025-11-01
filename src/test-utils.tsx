@@ -5,7 +5,7 @@
  * duplication across Reynard packages and standardize common
  * testing patterns for components, APIs, validation, and performance.
  */
-import { cleanup, render, waitFor, renderHook } from "@solidjs/testing-library";
+import { cleanup, render, waitFor } from "@solidjs/testing-library";
 import { createComponent, createContext, createEffect, createSignal, useContext, Component, JSX } from "solid-js";
 import { afterEach, beforeEach, expect, vi } from "vitest";
 

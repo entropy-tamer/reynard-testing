@@ -9,13 +9,13 @@
  */
 
 import { Page, Locator, expect } from "@playwright/test";
-import { DOMElement, UnifiedDOMAssertions, DOMTestEnvironment } from "../unified-dom-assertions";
+import { DOMElement, UnifiedDOMAssertions } from "../unified-dom-assertions";
 
 /**
  * Playwright-specific DOM element implementation
  */
 export class PlaywrightDOMElement implements DOMElement {
-  constructor(private locator: Locator) {}
+  constructor(public locator: Locator) {}
 
   async isVisible(): Promise<boolean> {
     try {
@@ -150,7 +150,9 @@ export class PlaywrightDOMAssertions extends UnifiedDOMAssertions {
    */
   async toHaveStyle(style: Record<string, string>): Promise<void> {
     const playwrightElement = this.element as PlaywrightDOMElement;
-    await expect(playwrightElement.locator).toHaveCSS(style);
+    for (const [property, value] of Object.entries(style)) {
+      await expect(playwrightElement.locator).toHaveCSS(property, value, { timeout: 5000 });
+    }
   }
 
   /**
@@ -158,7 +160,11 @@ export class PlaywrightDOMAssertions extends UnifiedDOMAssertions {
    */
   async toHaveBoundingBox(boundingBox: { x: number; y: number; width: number; height: number }): Promise<void> {
     const playwrightElement = this.element as PlaywrightDOMElement;
-    await expect(playwrightElement.locator).toHaveBoundingBox(boundingBox);
+    const box = await playwrightElement.locator.boundingBox();
+    if (!box) {
+      throw new Error("Element has no bounding box");
+    }
+    expect(box).toEqual(expect.objectContaining(boundingBox));
   }
 
   /**
@@ -265,7 +271,13 @@ export class PlaywrightDOMAssertions extends UnifiedDOMAssertions {
    */
   async pressKey(key: string, modifiers?: string[]): Promise<void> {
     const playwrightElement = this.element as PlaywrightDOMElement;
-    await playwrightElement.getLocator().press(key, { modifiers });
+    if (modifiers && modifiers.length > 0) {
+      // Handle modifiers by pressing them first, then the key
+      for (const modifier of modifiers) {
+        await playwrightElement.getLocator().press(modifier, { delay: 100 });
+      }
+    }
+    await playwrightElement.getLocator().press(key);
   }
 
   /**

@@ -99,7 +99,7 @@ export class DragDropInteractions {
     });
   }
 
-  private async vitestDragTo(target: UnifiedDOMAssertions, options?: DragDropOptions): Promise<void> {
+  private async vitestDragTo(target: UnifiedDOMAssertions, _options?: DragDropOptions): Promise<void> {
     // Simulate drag and drop using DOM events
     const sourceElement = (this.sourceElement.element as any).element;
     const targetElement = (target.element as any).element;
@@ -138,7 +138,7 @@ export class DragDropInteractions {
     );
   }
 
-  private async vitestDragToCoordinates(x: number, y: number, options?: DragDropOptions): Promise<void> {
+  private async vitestDragToCoordinates(x: number, y: number, _options?: DragDropOptions): Promise<void> {
     const sourceElement = (this.sourceElement.element as any).element;
 
     // Simulate drag to coordinates using mouse events
@@ -553,7 +553,7 @@ export const WORKFLOW_PATTERNS = {
    * Form submission workflow pattern
    */
   formSubmission: (
-    form: UnifiedDOMAssertions,
+    _form: UnifiedDOMAssertions,
     submitButton: UnifiedDOMAssertions,
     successMessage: UnifiedDOMAssertions
   ) => {

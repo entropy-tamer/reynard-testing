@@ -8,8 +8,7 @@
  */
 
 import { Page } from "@playwright/test";
-import { UnifiedDOMAssertions, DOMTestEnvironment } from "../unified-dom-assertions";
-import { PlaywrightDOMAssertions } from "../adapters/playwright-adapter";
+import { DOMTestEnvironment } from "../unified-dom-assertions";
 
 /**
  * DOM mutation record
@@ -221,10 +220,7 @@ export class DOMMutationTracker {
  * Render Performance Testing
  */
 export class RenderPerformanceTesting {
-  constructor(
-    private readonly environment: DOMTestEnvironment,
-    private readonly page?: Page
-  ) {}
+  constructor() {}
 
   /**
    * Measure render time for a function
@@ -586,8 +582,8 @@ export function createDOMMutationTracker(): DOMMutationTracker {
 /**
  * Create render performance testing instance
  */
-export function createRenderPerformanceTesting(environment: DOMTestEnvironment, page?: Page): RenderPerformanceTesting {
-  return new RenderPerformanceTesting(environment, page);
+export function createRenderPerformanceTesting(_environment: DOMTestEnvironment, _page?: Page): RenderPerformanceTesting {
+  return new RenderPerformanceTesting();
 }
 
 /**

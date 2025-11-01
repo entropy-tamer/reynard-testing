@@ -6,7 +6,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as glob from 'glob';
-import type { LanguageCode, Translations } from '@entropy-tamer/reynard-i18n';
+// import type { LanguageCode, Translations } from '@entropy-tamer/reynard-i18n';
+
+// Temporary type definitions until i18n package is built
+type LanguageCode = string;
+type Translations = Record<string, any>;
 
 // ============================================================================
 // Types for i18n Integration

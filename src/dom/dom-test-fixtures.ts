@@ -221,7 +221,7 @@ export function setupVitestDOMFixture(): void {
     document.getElementById(DOM_TEST_DATA.navigation.button3),
   ].filter(Boolean);
 
-  navButtons.forEach((button, index) => {
+  navButtons.forEach((button, _index) => {
     if (button) {
       button.addEventListener("focus", () => {
         button.style.backgroundColor = "#e3f2fd";
