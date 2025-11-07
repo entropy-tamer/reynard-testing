@@ -220,7 +220,6 @@ export class VitestDBReporter implements Reporter {
     return `vitest_${timestamp}_${random}`;
   }
 
-
   private calculateStats(files: File[]): { passed: number; failed: number; skipped: number } {
     let passed = 0;
     let failed = 0;

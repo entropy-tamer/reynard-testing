@@ -343,10 +343,7 @@ describe("prefer-memo ESLint Rule - Auto-fix", () => {
                 <p>{a * b}</p>
               </div>
             `,
-            errors: [
-              { messageId: "arrayOperation" },
-              { messageId: "mathematicalOperation" },
-            ],
+            errors: [{ messageId: "arrayOperation" }, { messageId: "mathematicalOperation" }],
             output: `
               <div>
                 <span>{createMemo(() => expression)}</span>
@@ -484,4 +481,3 @@ describe("prefer-memo ESLint Rule - Auto-fix", () => {
     });
   });
 });
-

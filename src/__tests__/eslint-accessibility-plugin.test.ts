@@ -177,4 +177,3 @@ describe("Accessibility ESLint Plugin - Complete Test Suite", () => {
     });
   });
 });
-

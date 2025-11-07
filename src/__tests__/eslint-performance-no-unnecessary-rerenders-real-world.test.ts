@@ -58,10 +58,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "inlineFunction" },
-              { messageId: "inlineFunction" },
-            ],
+            errors: [{ messageId: "inlineFunction" }, { messageId: "inlineFunction" }],
           },
         ],
       });
@@ -117,11 +114,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "inlineObject" },
-              { messageId: "inlineObject" },
-              { messageId: "inlineObject" },
-            ],
+            errors: [{ messageId: "inlineObject" }, { messageId: "inlineObject" }, { messageId: "inlineObject" }],
           },
         ],
       });
@@ -180,10 +173,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "inlineFunction" },
-              { messageId: "inlineFunction" },
-            ],
+            errors: [{ messageId: "inlineFunction" }, { messageId: "inlineFunction" }],
           },
         ],
       });
@@ -226,10 +216,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "inlineArray" },
-              { messageId: "inlineFunction" },
-            ],
+            errors: [{ messageId: "inlineArray" }, { messageId: "inlineFunction" }],
           },
         ],
       });
@@ -272,11 +259,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "inlineFunction" },
-              { messageId: "inlineFunction" },
-              { messageId: "inlineObject" },
-            ],
+            errors: [{ messageId: "inlineFunction" }, { messageId: "inlineFunction" }, { messageId: "inlineObject" }],
           },
         ],
       });
@@ -313,10 +296,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "inlineFunction" },
-              { messageId: "inlineObject" },
-            ],
+            errors: [{ messageId: "inlineFunction" }, { messageId: "inlineObject" }],
           },
         ],
       });
@@ -358,11 +338,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "inlineObject" },
-              { messageId: "inlineFunction" },
-              { messageId: "inlineObject" },
-            ],
+            errors: [{ messageId: "inlineObject" }, { messageId: "inlineFunction" }, { messageId: "inlineObject" }],
           },
         ],
       });
@@ -527,11 +503,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "inlineFunction" },
-              { messageId: "inlineFunction" },
-              { messageId: "inlineObject" },
-            ],
+            errors: [{ messageId: "inlineFunction" }, { messageId: "inlineFunction" }, { messageId: "inlineObject" }],
           },
         ],
       });
@@ -596,4 +568,3 @@ describe("no-unnecessary-rerenders ESLint Rule - Real-World Scenarios", () => {
     });
   });
 });
-

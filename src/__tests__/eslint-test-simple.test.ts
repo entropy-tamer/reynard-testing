@@ -28,21 +28,17 @@ describe("ESLint Test Setup", () => {
     // Test with a simple rule that always passes
     const simpleRule = {
       meta: {
-        type: 'suggestion',
+        type: "suggestion",
         docs: {
-          description: 'Simple test rule',
+          description: "Simple test rule",
         },
       },
       create: () => ({}),
     };
 
     ruleTester.run("simple-rule", simpleRule, {
-      valid: [
-        `const x = 1;`,
-        `function test() { return true; }`,
-      ],
+      valid: [`const x = 1;`, `function test() { return true; }`],
       invalid: [],
     });
   });
 });
-

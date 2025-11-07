@@ -396,11 +396,7 @@ describe("no-unnecessary-rerenders ESLint Rule - AST Parsing", () => {
               style={{ color: 'red' }}
               data-items={[1, 2, 3]}
             />`,
-            errors: [
-              { messageId: "inlineFunction" },
-              { messageId: "inlineObject" },
-              { messageId: "inlineArray" },
-            ],
+            errors: [{ messageId: "inlineFunction" }, { messageId: "inlineObject" }, { messageId: "inlineArray" }],
           },
         ],
       });
@@ -428,11 +424,7 @@ describe("no-unnecessary-rerenders ESLint Rule - AST Parsing", () => {
                 <DataTable data-items={[1, 2, 3]} />
               </div>
             `,
-            errors: [
-              { messageId: "inlineFunction" },
-              { messageId: "inlineObject" },
-              { messageId: "inlineArray" },
-            ],
+            errors: [{ messageId: "inlineFunction" }, { messageId: "inlineObject" }, { messageId: "inlineArray" }],
           },
         ],
       });
@@ -551,10 +543,7 @@ describe("no-unnecessary-rerenders ESLint Rule - AST Parsing", () => {
                 <UserProfile style={{ color: 'red' }} />
               </>
             `,
-            errors: [
-              { messageId: "inlineFunction" },
-              { messageId: "inlineObject" },
-            ],
+            errors: [{ messageId: "inlineFunction" }, { messageId: "inlineObject" }],
           },
         ],
       });

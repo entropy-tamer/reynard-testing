@@ -108,4 +108,3 @@ describe("Performance ESLint Plugin - Complete Test Suite", () => {
     });
   });
 });
-

@@ -194,4 +194,3 @@ describe("Reynard ESLint Plugin - Complete Test Suite", () => {
     });
   });
 });
-

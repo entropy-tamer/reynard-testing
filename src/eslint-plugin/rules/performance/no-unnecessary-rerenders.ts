@@ -3,12 +3,10 @@
  * Detects potential unnecessary re-renders in SolidJS components
  */
 
-import type { Rule } from 'eslint';
-import type { TSESTree } from '@typescript-eslint/types';
-import type { PerformanceRuleOptions } from '../../types.js';
-import { 
-  isSolidJSComponent
-} from '../../utils/index.js';
+import type { Rule } from "eslint";
+import type { TSESTree } from "@typescript-eslint/types";
+import type { PerformanceRuleOptions } from "../../types.js";
+import { isSolidJSComponent } from "../../utils/index.js";
 
 // ============================================================================
 // Rule Definition
@@ -16,29 +14,29 @@ import {
 
 export const noUnnecessaryRerenders: Rule.RuleModule = {
   meta: {
-    type: 'suggestion',
+    type: "suggestion",
     docs: {
-      description: 'Detect potential unnecessary re-renders in SolidJS components',
-      category: 'Performance',
+      description: "Detect potential unnecessary re-renders in SolidJS components",
+      category: "Performance",
       recommended: true,
-      url: 'https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/performance/no-unnecessary-rerenders.ts',
+      url: "https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/performance/no-unnecessary-rerenders.ts",
     },
-    fixable: 'code',
+    fixable: "code",
     schema: [
       {
-        type: 'object',
+        type: "object",
         properties: {
           enabled: {
-            type: 'boolean',
+            type: "boolean",
             default: true,
           },
           checkRerenders: {
-            type: 'boolean',
+            type: "boolean",
             default: true,
           },
           ignorePatterns: {
-            type: 'array',
-            items: { type: 'string' },
+            type: "array",
+            items: { type: "string" },
             default: [],
           },
         },
@@ -46,17 +44,20 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
       },
     ],
     messages: {
-      inlineFunction: 'Inline function in JSX prop may cause unnecessary re-renders. Consider using createMemo or moving function outside component',
-      inlineObject: 'Inline object in JSX prop may cause unnecessary re-renders. Consider using createMemo or moving object outside component',
-      inlineArray: 'Inline array in JSX prop may cause unnecessary re-renders. Consider using createMemo or moving array outside component',
-      missingMemo: 'Expensive computation should be memoized with createMemo',
-      unstableDependency: 'Signal dependency may be unstable. Consider using createMemo for derived values',
-      suggestMemo: 'Consider wrapping this expression with createMemo for better performance',
+      inlineFunction:
+        "Inline function in JSX prop may cause unnecessary re-renders. Consider using createMemo or moving function outside component",
+      inlineObject:
+        "Inline object in JSX prop may cause unnecessary re-renders. Consider using createMemo or moving object outside component",
+      inlineArray:
+        "Inline array in JSX prop may cause unnecessary re-renders. Consider using createMemo or moving array outside component",
+      missingMemo: "Expensive computation should be memoized with createMemo",
+      unstableDependency: "Signal dependency may be unstable. Consider using createMemo for derived values",
+      suggestMemo: "Consider wrapping this expression with createMemo for better performance",
     },
   },
 
   create(context: Rule.RuleContext): Rule.RuleListener {
-    const options = context.options[0] as PerformanceRuleOptions || {};
+    const options = (context.options[0] as PerformanceRuleOptions) || {};
     const enabled = options.enabled !== false;
     const checkRerenders = options.checkRerenders !== false;
     const ignorePatterns = options.ignorePatterns || [];
@@ -76,11 +77,12 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
     function shouldIgnoreElement(node: TSESTree.JSXElement): boolean {
       // Check for ignore patterns in className or other attributes
       for (const attribute of node.openingElement.attributes) {
-        if (attribute.type === 'JSXAttribute' && 
-            attribute.name.type === 'JSXIdentifier' && 
-            attribute.name.name === 'className') {
-          if (attribute.value && attribute.value.type === 'Literal' && 
-              typeof attribute.value.value === 'string') {
+        if (
+          attribute.type === "JSXAttribute" &&
+          attribute.name.type === "JSXIdentifier" &&
+          attribute.name.name === "className"
+        ) {
+          if (attribute.value && attribute.value.type === "Literal" && typeof attribute.value.value === "string") {
             const className = attribute.value.value;
             for (const pattern of ignorePatterns) {
               if (new RegExp(pattern).test(className)) {
@@ -98,13 +100,13 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
      */
     function isExpensiveExpression(expr: TSESTree.Expression): boolean {
       // Check for complex expressions that should be memoized
-      if (expr.type === 'CallExpression') {
+      if (expr.type === "CallExpression") {
         const callee = expr.callee;
-        if (callee.type === 'MemberExpression') {
+        if (callee.type === "MemberExpression") {
           // Array methods like .map, .filter, .reduce
-          if (callee.property.type === 'Identifier') {
+          if (callee.property.type === "Identifier") {
             const methodName = callee.property.name;
-            if (['map', 'filter', 'reduce', 'find', 'some', 'every'].includes(methodName)) {
+            if (["map", "filter", "reduce", "find", "some", "every"].includes(methodName)) {
               return true;
             }
           }
@@ -112,15 +114,15 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
       }
 
       // Check for mathematical operations
-      if (expr.type === 'BinaryExpression') {
-        const operators = ['*', '/', '%', '**'];
+      if (expr.type === "BinaryExpression") {
+        const operators = ["*", "/", "%", "**"];
         if (operators.includes(expr.operator)) {
           return true;
         }
       }
 
       // Check for ternary with complex expressions
-      if (expr.type === 'ConditionalExpression') {
+      if (expr.type === "ConditionalExpression") {
         return isExpensiveExpression(expr.consequent) || isExpensiveExpression(expr.alternate);
       }
 
@@ -131,9 +133,9 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
      * Check if expression is already memoized
      */
     function isMemoizedExpression(expr: TSESTree.Expression): boolean {
-      if (expr.type === 'CallExpression') {
+      if (expr.type === "CallExpression") {
         const callee = expr.callee;
-        if (callee.type === 'Identifier' && callee.name === 'createMemo') {
+        if (callee.type === "Identifier" && callee.name === "createMemo") {
           return true;
         }
       }
@@ -144,10 +146,10 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
      * Check if expression is a signal
      */
     function isSignalExpression(expr: TSESTree.Expression): boolean {
-      if (expr.type === 'CallExpression') {
+      if (expr.type === "CallExpression") {
         const callee = expr.callee;
-        if (callee.type === 'Identifier') {
-          const signalNames = ['createSignal', 'createMemo', 'createEffect', 'createResource'];
+        if (callee.type === "Identifier") {
+          const signalNames = ["createSignal", "createMemo", "createEffect", "createResource"];
           return signalNames.includes(callee.name);
         }
       }
@@ -160,7 +162,7 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
     function reportInlineFunction(node: TSESTree.JSXAttribute) {
       context.report({
         node,
-        messageId: 'inlineFunction',
+        messageId: "inlineFunction",
         fix: (_fixer: any) => {
           // Suggest moving function outside component or using createMemo
           return null; // No automatic fix for this case
@@ -174,7 +176,7 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
     function reportInlineObject(node: TSESTree.JSXAttribute) {
       context.report({
         node,
-        messageId: 'inlineObject',
+        messageId: "inlineObject",
         fix: (_fixer: any) => {
           // Suggest moving object outside component or using createMemo
           return null; // No automatic fix for this case
@@ -188,7 +190,7 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
     function reportInlineArray(node: TSESTree.JSXAttribute) {
       context.report({
         node,
-        messageId: 'inlineArray',
+        messageId: "inlineArray",
         fix: (_fixer: any) => {
           // Suggest moving array outside component or using createMemo
           return null; // No automatic fix for this case
@@ -202,7 +204,7 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
     function reportMissingMemo(node: TSESTree.Expression) {
       context.report({
         node,
-        messageId: 'missingMemo',
+        messageId: "missingMemo",
         fix: (_fixer: any) => {
           // const sourceCode = context.getSourceCode(); // TODO: Use for more precise replacement
           // const nodeText = getNodeText(node, sourceCode.getText()); // TODO: Use for more precise replacement
@@ -217,7 +219,7 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
     function reportUnstableDependency(node: TSESTree.Expression) {
       context.report({
         node,
-        messageId: 'unstableDependency',
+        messageId: "unstableDependency",
       });
     }
 
@@ -227,7 +229,7 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
     function reportSuggestMemo(node: TSESTree.Expression) {
       context.report({
         node,
-        messageId: 'suggestMemo',
+        messageId: "suggestMemo",
         fix: (_fixer: any) => {
           // const sourceCode = context.getSourceCode(); // TODO: Use for more precise replacement
           // const nodeText = getNodeText(node, sourceCode.getText()); // TODO: Use for more precise replacement
@@ -258,26 +260,25 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
 
         // Check for inline functions, objects, and arrays in props
         for (const attribute of node.openingElement.attributes) {
-          if (attribute.type === 'JSXAttribute' && attribute.value) {
-            if (attribute.value.type === 'JSXExpressionContainer') {
+          if (attribute.type === "JSXAttribute" && attribute.value) {
+            if (attribute.value.type === "JSXExpressionContainer") {
               const expression = attribute.value.expression;
-              
+
               // Check for inline functions
-              if (expression.type === 'ArrowFunctionExpression' || 
-                  expression.type === 'FunctionExpression') {
+              if (expression.type === "ArrowFunctionExpression" || expression.type === "FunctionExpression") {
                 reportInlineFunction(attribute);
               }
-              
+
               // Check for inline objects
-              else if (expression.type === 'ObjectExpression') {
+              else if (expression.type === "ObjectExpression") {
                 reportInlineObject(attribute);
               }
-              
+
               // Check for inline arrays
-              else if (expression.type === 'ArrayExpression') {
+              else if (expression.type === "ArrayExpression") {
                 reportInlineArray(attribute);
               }
-              
+
               // Check for expensive expressions
               else if (isExpensiveExpression(expression) && !isMemoizedExpression(expression)) {
                 reportMissingMemo(expression);
@@ -295,7 +296,7 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
 
         // Check if we're inside a component
         const parent = node.parent;
-        if (!parent || parent.type !== 'JSXExpressionContainer') {
+        if (!parent || parent.type !== "JSXExpressionContainer") {
           return;
         }
 
@@ -312,7 +313,7 @@ export const noUnnecessaryRerenders: Rule.RuleModule = {
         }
 
         // Check for signal operations that might be unstable
-        if (node.operator === '+' || node.operator === '-') {
+        if (node.operator === "+" || node.operator === "-") {
           if (isSignalExpression(node.left) || isSignalExpression(node.right)) {
             reportUnstableDependency(node);
           }

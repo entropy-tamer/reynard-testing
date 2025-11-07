@@ -27,7 +27,7 @@ export interface PluginConfig {
 // ============================================================================
 
 export interface ASTParserOptions {
-  sourceType?: 'module' | 'script';
+  sourceType?: "module" | "script";
   ecmaVersion?: number;
   jsx?: boolean;
   ecmaFeatures?: {
@@ -175,8 +175,8 @@ export interface FileMatchResult {
 // ============================================================================
 
 export interface SolidJSNode {
-  type: 'JSXElement' | 'JSXFragment' | 'CallExpression';
-  solidType?: 'component' | 'signal' | 'effect' | 'memo' | 'resource';
+  type: "JSXElement" | "JSXFragment" | "CallExpression";
+  solidType?: "component" | "signal" | "effect" | "memo" | "resource";
 }
 
 export interface ComponentInfo {
@@ -200,8 +200,8 @@ export interface AriaAttribute {
 }
 
 export interface AccessibilityIssue {
-  type: 'missing-alt' | 'invalid-aria' | 'keyboard-navigation' | 'focus-management';
-  severity: 'error' | 'warning' | 'info';
+  type: "missing-alt" | "invalid-aria" | "keyboard-navigation" | "focus-management";
+  severity: "error" | "warning" | "info";
   message: string;
   node: TSESTree.Node;
   fix?: Rule.Fix;
@@ -213,20 +213,17 @@ export interface AccessibilityIssue {
 // ============================================================================
 
 export interface PerformanceIssue {
-  type: 'unnecessary-rerender' | 'missing-memo' | 'expensive-computation' | 'unstable-deps';
-  severity: 'error' | 'warning' | 'info';
+  type: "unnecessary-rerender" | "missing-memo" | "expensive-computation" | "unstable-deps";
+  severity: "error" | "warning" | "info";
   message: string;
   node: TSESTree.Node;
   fix?: Rule.Fix;
   suggestions?: any[];
-  impact: 'low' | 'medium' | 'high';
+  impact: "low" | "medium" | "high";
 }
 
 // ============================================================================
 // Export all types
 // ============================================================================
 
-export type {
-  Rule,
-  TSESTree,
-};
+export type { Rule, TSESTree };

@@ -3,13 +3,10 @@
  * Ensures images have proper alt attributes for accessibility
  */
 
-import type { Rule } from 'eslint';
-import type { TSESTree } from '@typescript-eslint/types';
-import type { AccessibilityRuleOptions } from '../../types.js';
-import { 
-  hasAltAttribute,
-  getAltAttributeValue
-} from '../../utils/index.js';
+import type { Rule } from "eslint";
+import type { TSESTree } from "@typescript-eslint/types";
+import type { AccessibilityRuleOptions } from "../../types.js";
+import { hasAltAttribute, getAltAttributeValue } from "../../utils/index.js";
 
 // ============================================================================
 // Rule Definition
@@ -17,29 +14,29 @@ import {
 
 export const noMissingAlt: Rule.RuleModule = {
   meta: {
-    type: 'problem',
+    type: "problem",
     docs: {
-      description: 'Ensure images have proper alt attributes for accessibility',
-      category: 'Accessibility',
+      description: "Ensure images have proper alt attributes for accessibility",
+      category: "Accessibility",
       recommended: true,
-      url: 'https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/accessibility/no-missing-alt.ts',
+      url: "https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/accessibility/no-missing-alt.ts",
     },
-    fixable: 'code',
+    fixable: "code",
     schema: [
       {
-        type: 'object',
+        type: "object",
         properties: {
           enabled: {
-            type: 'boolean',
+            type: "boolean",
             default: true,
           },
           requireAlt: {
-            type: 'boolean',
+            type: "boolean",
             default: true,
           },
           ignorePatterns: {
-            type: 'array',
-            items: { type: 'string' },
+            type: "array",
+            items: { type: "string" },
             default: [],
           },
         },
@@ -47,15 +44,15 @@ export const noMissingAlt: Rule.RuleModule = {
       },
     ],
     messages: {
-      missingAlt: 'Image element must have an alt attribute for accessibility',
+      missingAlt: "Image element must have an alt attribute for accessibility",
       emptyAlt: 'Image alt attribute should not be empty. Use alt="" for decorative images or provide descriptive text',
-      invalidAlt: 'Image alt attribute should be descriptive and meaningful',
+      invalidAlt: "Image alt attribute should be descriptive and meaningful",
       decorativeImage: 'Consider using alt="" for decorative images',
     },
   },
 
   create(context: Rule.RuleContext): Rule.RuleListener {
-    const options = context.options[0] as AccessibilityRuleOptions || {};
+    const options = (context.options[0] as AccessibilityRuleOptions) || {};
     const enabled = options.enabled !== false;
     const requireAlt = options.requireAlt !== false;
     const ignorePatterns = options.ignorePatterns || [];
@@ -75,11 +72,12 @@ export const noMissingAlt: Rule.RuleModule = {
     function shouldIgnoreImage(node: TSESTree.JSXElement): boolean {
       // Check for ignore patterns in className or other attributes
       for (const attribute of node.openingElement.attributes) {
-        if (attribute.type === 'JSXAttribute' && 
-            attribute.name.type === 'JSXIdentifier' && 
-            attribute.name.name === 'className') {
-          if (attribute.value && attribute.value.type === 'Literal' && 
-              typeof attribute.value.value === 'string') {
+        if (
+          attribute.type === "JSXAttribute" &&
+          attribute.name.type === "JSXIdentifier" &&
+          attribute.name.name === "className"
+        ) {
+          if (attribute.value && attribute.value.type === "Literal" && typeof attribute.value.value === "string") {
             const className = attribute.value.value;
             for (const pattern of ignorePatterns) {
               if (new RegExp(pattern).test(className)) {
@@ -98,16 +96,19 @@ export const noMissingAlt: Rule.RuleModule = {
     function isDecorativeImage(node: TSESTree.JSXElement): boolean {
       // Check for decorative indicators in className
       for (const attribute of node.openingElement.attributes) {
-        if (attribute.type === 'JSXAttribute' && 
-            attribute.name.type === 'JSXIdentifier' && 
-            attribute.name.name === 'className') {
-          if (attribute.value && attribute.value.type === 'Literal' && 
-              typeof attribute.value.value === 'string') {
+        if (
+          attribute.type === "JSXAttribute" &&
+          attribute.name.type === "JSXIdentifier" &&
+          attribute.name.name === "className"
+        ) {
+          if (attribute.value && attribute.value.type === "Literal" && typeof attribute.value.value === "string") {
             const className = attribute.value.value.toLowerCase();
-            if (className.includes('decorative') || 
-                className.includes('ornament') || 
-                className.includes('icon') ||
-                className.includes('logo')) {
+            if (
+              className.includes("decorative") ||
+              className.includes("ornament") ||
+              className.includes("icon") ||
+              className.includes("logo")
+            ) {
               return true;
             }
           }
@@ -151,10 +152,10 @@ export const noMissingAlt: Rule.RuleModule = {
      */
     function reportMissingAlt(node: TSESTree.JSXElement) {
       const isDecorative = isDecorativeImage(node);
-      
+
       const report: Rule.ReportDescriptor = {
         node: node as any,
-        messageId: isDecorative ? 'decorativeImage' : 'missingAlt',
+        messageId: isDecorative ? "decorativeImage" : "missingAlt",
       };
 
       // Add fix for decorative images
@@ -172,21 +173,25 @@ export const noMissingAlt: Rule.RuleModule = {
      */
     function reportEmptyAlt(node: TSESTree.JSXElement) {
       const isDecorative = isDecorativeImage(node);
-      
+
       context.report({
         node,
-        messageId: isDecorative ? 'decorativeImage' : 'emptyAlt',
-        fix: isDecorative ? (fixer) => {
-          // Fix empty alt to alt=""
-          for (const attribute of node.openingElement.attributes) {
-            if (attribute.type === 'JSXAttribute' && 
-                attribute.name.type === 'JSXIdentifier' && 
-                attribute.name.name === 'alt') {
-              return fixer.replaceText(attribute, 'alt=""');
+        messageId: isDecorative ? "decorativeImage" : "emptyAlt",
+        fix: isDecorative
+          ? fixer => {
+              // Fix empty alt to alt=""
+              for (const attribute of node.openingElement.attributes) {
+                if (
+                  attribute.type === "JSXAttribute" &&
+                  attribute.name.type === "JSXIdentifier" &&
+                  attribute.name.name === "alt"
+                ) {
+                  return fixer.replaceText(attribute, 'alt=""');
+                }
+              }
+              return null;
             }
-          }
-          return null;
-        } : undefined,
+          : undefined,
       });
     }
 
@@ -196,7 +201,7 @@ export const noMissingAlt: Rule.RuleModule = {
     function reportInvalidAlt(node: TSESTree.JSXElement, altText: string) {
       context.report({
         node,
-        messageId: 'invalidAlt',
+        messageId: "invalidAlt",
         data: { altText },
       });
     }
@@ -208,8 +213,7 @@ export const noMissingAlt: Rule.RuleModule = {
     return {
       JSXElement(node: any) {
         // Only check img elements
-        if (node.openingElement.name.type !== 'JSXIdentifier' || 
-            node.openingElement.name.name !== 'img') {
+        if (node.openingElement.name.type !== "JSXIdentifier" || node.openingElement.name.name !== "img") {
           return;
         }
 
@@ -228,14 +232,14 @@ export const noMissingAlt: Rule.RuleModule = {
 
         // Get alt attribute value
         const altValue = getAltAttributeValue(node);
-        
+
         if (altValue === null) {
           // Alt attribute exists but has no value
           reportEmptyAlt(node);
           return;
         }
 
-        if (altValue === '') {
+        if (altValue === "") {
           // Empty alt attribute
           reportEmptyAlt(node);
           return;

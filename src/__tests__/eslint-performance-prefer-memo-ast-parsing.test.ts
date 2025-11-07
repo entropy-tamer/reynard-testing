@@ -251,9 +251,7 @@ describe("prefer-memo ESLint Rule - AST Parsing", () => {
 
     it("should detect nested memoization", () => {
       ruleTester.run("prefer-memo", preferMemo, {
-        valid: [
-          `<div>{createMemo(() => createMemo(() => items.map(item => item.name)))}</div>`,
-        ],
+        valid: [`<div>{createMemo(() => createMemo(() => items.map(item => item.name)))}</div>`],
         invalid: [],
       });
     });

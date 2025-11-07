@@ -18,4 +18,3 @@ global.localStorage = localStorageMock as typeof globalThis.localStorage;
 afterEach(() => {
   vi.clearAllMocks();
 });
-

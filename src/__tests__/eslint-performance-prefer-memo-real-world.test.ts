@@ -75,10 +75,7 @@ describe("prefer-memo ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "arrayOperation" },
-              { messageId: "mathematicalOperation" },
-            ],
+            errors: [{ messageId: "arrayOperation" }, { messageId: "mathematicalOperation" }],
           },
         ],
       });
@@ -554,10 +551,7 @@ describe("prefer-memo ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "objectOperation" },
-              { messageId: "mathematicalOperation" },
-            ],
+            errors: [{ messageId: "objectOperation" }, { messageId: "mathematicalOperation" }],
           },
         ],
       });
@@ -598,10 +592,7 @@ describe("prefer-memo ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "mathematicalOperation" },
-              { messageId: "arrayOperation" },
-            ],
+            errors: [{ messageId: "mathematicalOperation" }, { messageId: "arrayOperation" }],
           },
         ],
       });
@@ -644,10 +635,7 @@ describe("prefer-memo ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "arrayOperation" },
-              { messageId: "mathematicalOperation" },
-            ],
+            errors: [{ messageId: "arrayOperation" }, { messageId: "mathematicalOperation" }],
           },
         ],
       });
@@ -660,19 +648,19 @@ describe("prefer-memo ESLint Rule - Real-World Scenarios", () => {
         valid: [
           // Simple price display without expensive operations
           "function SimplePriceDisplay({ items }) {\n" +
-          "  return (\n" +
-          "    <div>\n" +
-          "      <h3>Items</h3>\n" +
-          "      <ul>\n" +
-          "        {items.map((item, index) => (\n" +
-          "          <li key={index}>\n" +
-          "            {item.name}: {item.price}\n" +
-          "          </li>\n" +
-          "        ))}\n" +
-          "      </ul>\n" +
-          "    </div>\n" +
-          "  );\n" +
-          "}",
+            "  return (\n" +
+            "    <div>\n" +
+            "      <h3>Items</h3>\n" +
+            "      <ul>\n" +
+            "        {items.map((item, index) => (\n" +
+            "          <li key={index}>\n" +
+            "            {item.name}: {item.price}\n" +
+            "          </li>\n" +
+            "        ))}\n" +
+            "      </ul>\n" +
+            "    </div>\n" +
+            "  );\n" +
+            "}",
         ],
         invalid: [
           {
@@ -692,10 +680,7 @@ describe("prefer-memo ESLint Rule - Real-World Scenarios", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "arrayOperation" },
-              { messageId: "mathematicalOperation" },
-            ],
+            errors: [{ messageId: "arrayOperation" }, { messageId: "mathematicalOperation" }],
           },
         ],
       });
@@ -706,17 +691,17 @@ describe("prefer-memo ESLint Rule - Real-World Scenarios", () => {
         valid: [
           // Simple sales report without expensive operations
           "function SimpleSalesReport({ categories, period }) {\n" +
-          "  return (\n" +
-          "    <div>\n" +
-          "      <h3>Sales Report - {period}</h3>\n" +
-          "      {categories.map((cat, index) => (\n" +
-          "        <div key={index}>\n" +
-          "          {cat.name}: {cat.total}\n" +
-          "        </div>\n" +
-          "      ))}\n" +
-          "    </div>\n" +
-          "  );\n" +
-          "}",
+            "  return (\n" +
+            "    <div>\n" +
+            "      <h3>Sales Report - {period}</h3>\n" +
+            "      {categories.map((cat, index) => (\n" +
+            "        <div key={index}>\n" +
+            "          {cat.name}: {cat.total}\n" +
+            "        </div>\n" +
+            "      ))}\n" +
+            "    </div>\n" +
+            "  );\n" +
+            "}",
         ],
         invalid: [
           {

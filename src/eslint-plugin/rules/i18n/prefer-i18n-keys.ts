@@ -3,12 +3,10 @@
  * Detects string concatenation and suggests i18n key usage
  */
 
-import type { Rule } from 'eslint';
-import type { TSESTree } from '@typescript-eslint/types';
-import type { I18nRuleOptions } from '../../types.js';
-import { 
-  isHardcodedString
-} from '../../utils/index.js';
+import type { Rule } from "eslint";
+import type { TSESTree } from "@typescript-eslint/types";
+import type { I18nRuleOptions } from "../../types.js";
+import { isHardcodedString } from "../../utils/index.js";
 
 // ============================================================================
 // Rule Definition
@@ -16,29 +14,29 @@ import {
 
 export const preferI18nKeys: Rule.RuleModule = {
   meta: {
-    type: 'suggestion',
+    type: "suggestion",
     docs: {
-      description: 'Prefer i18n keys over string concatenation',
-      category: 'Best Practices',
+      description: "Prefer i18n keys over string concatenation",
+      category: "Best Practices",
       recommended: true,
-      url: 'https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/i18n/prefer-i18n-keys.ts',
+      url: "https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/i18n/prefer-i18n-keys.ts",
     },
-    fixable: 'code',
+    fixable: "code",
     schema: [
       {
-        type: 'object',
+        type: "object",
         properties: {
           enabled: {
-            type: 'boolean',
+            type: "boolean",
             default: true,
           },
           ignorePatterns: {
-            type: 'array',
-            items: { type: 'string' },
+            type: "array",
+            items: { type: "string" },
             default: [],
           },
           autoFix: {
-            type: 'boolean',
+            type: "boolean",
             default: false,
           },
         },
@@ -46,15 +44,17 @@ export const preferI18nKeys: Rule.RuleModule = {
       },
     ],
     messages: {
-      stringConcatenation: 'String concatenation detected. Consider using i18n keys with parameters: t("{{suggestedKey}}", { {{params}} })',
-      stringConcatenationNoFix: 'String concatenation detected. Consider using i18n keys with parameters',
-      templateLiteral: 'Template literal detected. Consider using i18n keys with parameters: t("{{suggestedKey}}", { {{params}} })',
-      templateLiteralNoFix: 'Template literal detected. Consider using i18n keys with parameters',
+      stringConcatenation:
+        'String concatenation detected. Consider using i18n keys with parameters: t("{{suggestedKey}}", { {{params}} })',
+      stringConcatenationNoFix: "String concatenation detected. Consider using i18n keys with parameters",
+      templateLiteral:
+        'Template literal detected. Consider using i18n keys with parameters: t("{{suggestedKey}}", { {{params}} })',
+      templateLiteralNoFix: "Template literal detected. Consider using i18n keys with parameters",
     },
   },
 
   create(context: Rule.RuleContext): Rule.RuleListener {
-    const options = context.options[0] as I18nRuleOptions || {};
+    const options = (context.options[0] as I18nRuleOptions) || {};
     const enabled = options.enabled !== false;
     const ignorePatterns = options.ignorePatterns || [];
     const autoFix = options.autoFix || false;
@@ -73,10 +73,10 @@ export const preferI18nKeys: Rule.RuleModule = {
      */
     function generateI18nKey(parts: string[]): string {
       // Join parts and create a key
-      const combined = parts.join(' ').toLowerCase();
+      const combined = parts.join(" ").toLowerCase();
       return combined
-        .replace(/[^a-z0-9\s]/g, '')
-        .replace(/\s+/g, '.')
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, ".")
         .substring(0, 50);
     }
 
@@ -87,12 +87,12 @@ export const preferI18nKeys: Rule.RuleModule = {
       const parts: string[] = [];
 
       function traverse(expr: TSESTree.Expression) {
-        if (expr.type === 'Literal' && typeof expr.value === 'string') {
+        if (expr.type === "Literal" && typeof expr.value === "string") {
           parts.push(expr.value);
-        } else if (expr.type === 'BinaryExpression' && expr.operator === '+') {
+        } else if (expr.type === "BinaryExpression" && expr.operator === "+") {
           traverse(expr.left);
           traverse(expr.right);
-        } else if (expr.type === 'Identifier' || expr.type === 'MemberExpression') {
+        } else if (expr.type === "Identifier" || expr.type === "MemberExpression") {
           // This is a variable reference - we'll suggest a parameter
           parts.push(`{{${getVariableName(expr)}}}`);
         }
@@ -130,21 +130,21 @@ export const preferI18nKeys: Rule.RuleModule = {
      * Get variable name from expression
      */
     function getVariableName(expr: TSESTree.Expression): string {
-      if (expr.type === 'Identifier') {
+      if (expr.type === "Identifier") {
         return expr.name;
-      } else if (expr.type === 'MemberExpression') {
+      } else if (expr.type === "MemberExpression") {
         const object = getVariableName(expr.object);
-        const property = expr.property.type === 'Identifier' ? expr.property.name : 'prop';
+        const property = expr.property.type === "Identifier" ? expr.property.name : "prop";
         return `${object}.${property}`;
       }
-      return 'value';
+      return "value";
     }
 
     /**
      * Generate parameter object string
      */
     function generateParams(expressions: string[]): string {
-      return expressions.map(expr => `${expr}: ${expr}`).join(', ');
+      return expressions.map(expr => `${expr}: ${expr}`).join(", ");
     }
 
     /**
@@ -153,7 +153,7 @@ export const preferI18nKeys: Rule.RuleModule = {
     function shouldIgnoreConcatenation(parts: string[]): boolean {
       // Check if any part is a hardcoded string that should be ignored
       for (const part of parts) {
-        if (typeof part === 'string' && isHardcodedString(part, 3, ignorePatterns)) {
+        if (typeof part === "string" && isHardcodedString(part, 3, ignorePatterns)) {
           return false; // Don't ignore if it contains hardcoded strings
         }
       }
@@ -164,11 +164,11 @@ export const preferI18nKeys: Rule.RuleModule = {
      * Report string concatenation
      */
     function reportStringConcatenation(node: TSESTree.Node, parts: string[], expressions: string[] = []) {
-      const suggestedKey = generateI18nKey(parts.filter(p => !p.startsWith('{{')));
+      const suggestedKey = generateI18nKey(parts.filter(p => !p.startsWith("{{")));
       const params = generateParams(expressions);
-      
-      const messageId = autoFix ? 'stringConcatenation' : 'stringConcatenationNoFix';
-      
+
+      const messageId = autoFix ? "stringConcatenation" : "stringConcatenationNoFix";
+
       const report: Rule.ReportDescriptor = {
         node: node as any,
         messageId,
@@ -183,7 +183,7 @@ export const preferI18nKeys: Rule.RuleModule = {
         report.fix = (fixer: any) => {
           // const sourceCode = context.getSourceCode(); // TODO: Use for more precise replacement
           // const nodeText = getNodeText(node, sourceCode.getText()); // TODO: Use for more precise replacement
-          
+
           // Replace with t() call
           const replacement = `t("${suggestedKey}", { ${params} })`;
           return fixer.replaceText(node, replacement);
@@ -197,11 +197,11 @@ export const preferI18nKeys: Rule.RuleModule = {
      * Report template literal
      */
     function reportTemplateLiteral(node: TSESTree.Node, parts: string[], expressions: string[]) {
-      const suggestedKey = generateI18nKey(parts.filter(p => !p.startsWith('{{')));
+      const suggestedKey = generateI18nKey(parts.filter(p => !p.startsWith("{{")));
       const params = generateParams(expressions);
-      
-      const messageId = autoFix ? 'templateLiteral' : 'templateLiteralNoFix';
-      
+
+      const messageId = autoFix ? "templateLiteral" : "templateLiteralNoFix";
+
       const report: Rule.ReportDescriptor = {
         node: node as any,
         messageId,
@@ -216,7 +216,7 @@ export const preferI18nKeys: Rule.RuleModule = {
         report.fix = (fixer: any) => {
           // const sourceCode = context.getSourceCode(); // TODO: Use for more precise replacement
           // const nodeText = getNodeText(node, sourceCode.getText()); // TODO: Use for more precise replacement
-          
+
           // Replace with t() call
           const replacement = `t("${suggestedKey}", { ${params} })`;
           return fixer.replaceText(node, replacement);
@@ -233,24 +233,24 @@ export const preferI18nKeys: Rule.RuleModule = {
     return {
       // Check binary expressions with string concatenation
       BinaryExpression(node: any) {
-        if (node.operator !== '+') {
+        if (node.operator !== "+") {
           return;
         }
 
         const parts = extractStringParts(node);
-        
+
         // Only report if we have multiple parts and at least one is a string
         if (parts.length < 2) {
           return;
         }
 
-        const stringParts = parts.filter(p => typeof p === 'string' && !p.startsWith('{{'));
+        const stringParts = parts.filter(p => typeof p === "string" && !p.startsWith("{{"));
         if (stringParts.length === 0) {
           return;
         }
 
         if (!shouldIgnoreConcatenation(parts)) {
-          const expressions = parts.filter(p => p.startsWith('{{')).map(p => p.slice(2, -2));
+          const expressions = parts.filter(p => p.startsWith("{{")).map(p => p.slice(2, -2));
           reportStringConcatenation(node, parts, expressions);
         }
       },
@@ -263,12 +263,12 @@ export const preferI18nKeys: Rule.RuleModule = {
         }
 
         const { parts, expressions } = extractTemplateParts(node);
-        
+
         if (parts.length < 2) {
           return;
         }
 
-        const stringParts = parts.filter(p => typeof p === 'string' && !p.startsWith('{{'));
+        const stringParts = parts.filter(p => typeof p === "string" && !p.startsWith("{{"));
         if (stringParts.length === 0) {
           return;
         }

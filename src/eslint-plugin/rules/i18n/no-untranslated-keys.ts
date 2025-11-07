@@ -3,7 +3,7 @@
  * Validates that translation keys exist in translation files
  */
 
-import type { Rule } from 'eslint';
+import type { Rule } from "eslint";
 
 // ============================================================================
 // Rule Definition
@@ -11,33 +11,33 @@ import type { Rule } from 'eslint';
 
 export const noUntranslatedKeys: Rule.RuleModule = {
   meta: {
-    type: 'problem',
+    type: "problem",
     docs: {
-      description: 'Validate that translation keys exist in translation files',
-      category: 'Best Practices',
+      description: "Validate that translation keys exist in translation files",
+      category: "Best Practices",
       recommended: true,
-      url: 'https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/i18n/no-untranslated-keys.ts',
+      url: "https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/i18n/no-untranslated-keys.ts",
     },
     fixable: undefined,
     schema: [
       {
-        type: 'object',
+        type: "object",
         properties: {
           enabled: {
-            type: 'boolean',
+            type: "boolean",
             default: true,
           },
           strictMode: {
-            type: 'boolean',
+            type: "boolean",
             default: false,
           },
           translationFiles: {
-            type: 'array',
-            items: { type: 'string' },
-            default: ['src/lang/**/*.ts', 'packages/*/src/lang/**/*.ts'],
+            type: "array",
+            items: { type: "string" },
+            default: ["src/lang/**/*.ts", "packages/*/src/lang/**/*.ts"],
           },
           autoFix: {
-            type: 'boolean',
+            type: "boolean",
             default: false,
           },
         },

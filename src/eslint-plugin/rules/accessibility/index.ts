@@ -3,15 +3,15 @@
  * Exports all accessibility-related ESLint rules
  */
 
-import { noMissingAlt } from './no-missing-alt.js';
-import { ariaProps } from './aria-props.js';
-import { keyboardNavigation } from './keyboard-navigation.js';
+import { noMissingAlt } from "./no-missing-alt.js";
+import { ariaProps } from "./aria-props.js";
+import { keyboardNavigation } from "./keyboard-navigation.js";
 
 export { noMissingAlt, ariaProps, keyboardNavigation };
 
 // Re-export as default for easier importing
 export default {
-  'no-missing-alt': noMissingAlt,
-  'aria-props': ariaProps,
-  'keyboard-navigation': keyboardNavigation,
+  "no-missing-alt": noMissingAlt,
+  "aria-props": ariaProps,
+  "keyboard-navigation": keyboardNavigation,
 };

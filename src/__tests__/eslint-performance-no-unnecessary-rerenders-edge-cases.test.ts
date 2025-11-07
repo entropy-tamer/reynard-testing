@@ -63,11 +63,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Edge Cases", () => {
   describe("Empty Components", () => {
     it("should handle components with no props", () => {
       ruleTester.run("no-unnecessary-rerenders", noUnnecessaryRerenders, {
-        valid: [
-          `<MyComponent />`,
-          `<UserProfile />`,
-          `<DataTable />`,
-        ],
+        valid: [`<MyComponent />`, `<UserProfile />`, `<DataTable />`],
         invalid: [],
       });
     });
@@ -248,11 +244,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Edge Cases", () => {
 
     it("should not trigger for stable signal operations", () => {
       ruleTester.run("no-unnecessary-rerenders", noUnnecessaryRerenders, {
-        valid: [
-          `<div>{signal1()}</div>`,
-          `<div>{signal1() * 2}</div>`,
-          `<div>{signal1() / 2}</div>`,
-        ],
+        valid: [`<div>{signal1()}</div>`, `<div>{signal1() * 2}</div>`, `<div>{signal1() / 2}</div>`],
         invalid: [],
       });
     });
@@ -301,10 +293,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Edge Cases", () => {
 
     it("should handle template literals", () => {
       ruleTester.run("no-unnecessary-rerenders", noUnnecessaryRerenders, {
-        valid: [
-          `<MyComponent title={\`Hello \${name}\`} />`,
-          `<MyComponent className={\`btn \${variant}\`} />`,
-        ],
+        valid: [`<MyComponent title={\`Hello \${name}\`} />`, `<MyComponent className={\`btn \${variant}\`} />`],
         invalid: [],
       });
     });
@@ -457,9 +446,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Edge Cases", () => {
   describe("TypeScript Edge Cases", () => {
     it("should handle type assertions", () => {
       ruleTester.run("no-unnecessary-rerenders", noUnnecessaryRerenders, {
-        valid: [
-          `<MyComponent onClick={handleClick as () => void} />`,
-        ],
+        valid: [`<MyComponent onClick={handleClick as () => void} />`],
         invalid: [
           {
             code: `<MyComponent onClick={(handleClick as () => void) || (() => console.log('fallback'))} />`,

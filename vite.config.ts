@@ -11,7 +11,7 @@ export default defineConfig({
         config: "./src/config/index.ts",
         utils: "./src/utils/index.ts",
         mocks: "./src/mocks/index.ts",
-        'eslint-plugin': "./src/eslint-plugin/index.ts",
+        "eslint-plugin": "./src/eslint-plugin/index.ts",
       },
       formats: ["es"],
       fileName: (format, entryName) => `${entryName}.js`,

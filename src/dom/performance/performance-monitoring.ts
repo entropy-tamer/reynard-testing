@@ -582,7 +582,10 @@ export function createDOMMutationTracker(): DOMMutationTracker {
 /**
  * Create render performance testing instance
  */
-export function createRenderPerformanceTesting(_environment: DOMTestEnvironment, _page?: Page): RenderPerformanceTesting {
+export function createRenderPerformanceTesting(
+  _environment: DOMTestEnvironment,
+  _page?: Page
+): RenderPerformanceTesting {
   return new RenderPerformanceTesting();
 }
 

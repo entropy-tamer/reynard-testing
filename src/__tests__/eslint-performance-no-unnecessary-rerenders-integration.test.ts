@@ -262,10 +262,7 @@ describe("no-unnecessary-rerenders ESLint Rule - Integration", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "inlineFunction" },
-              { messageId: "inlineObject" },
-            ],
+            errors: [{ messageId: "inlineFunction" }, { messageId: "inlineObject" }],
           },
         ],
       });
@@ -416,14 +413,10 @@ describe("no-unnecessary-rerenders ESLint Rule - Integration", () => {
                 );
               }
             `,
-            errors: [
-              { messageId: "inlineFunction" },
-              { messageId: "inlineObject" },
-            ],
+            errors: [{ messageId: "inlineFunction" }, { messageId: "inlineObject" }],
           },
         ],
       });
     });
   });
 });
-

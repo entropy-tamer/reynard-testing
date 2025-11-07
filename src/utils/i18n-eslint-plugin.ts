@@ -124,20 +124,20 @@ export const i18nRules: Record<string, Rule.RuleModule> = {
     create(context: any) {
       const options = context.options[0] || {};
       const enabled = options.enabled || false;
-      
+
       // For now, this rule is disabled by default until proper translation validation is implemented
       // This prevents false positives while the translation loading system is being developed
       if (!enabled) {
         return {};
       }
-      
+
       // TODO: Implement proper translation key validation
       // This would involve:
       // 1. Loading translation files from the configured paths
       // 2. Parsing the translation objects
       // 3. Validating that keys exist in the loaded translations
       // 4. Reporting missing keys
-      
+
       return {
         CallExpression(node: any) {
           if (

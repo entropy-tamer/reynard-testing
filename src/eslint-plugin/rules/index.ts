@@ -4,18 +4,18 @@
  */
 
 // i18n rules
-export * from './i18n/index.js';
+export * from "./i18n/index.js";
 
 // accessibility rules
-export * from './accessibility/index.js';
+export * from "./accessibility/index.js";
 
 // performance rules
-export * from './performance/index.js';
+export * from "./performance/index.js";
 
 // Re-export as default for easier importing
-import i18nRules from './i18n/index.js';
-import accessibilityRules from './accessibility/index.js';
-import performanceRules from './performance/index.js';
+import i18nRules from "./i18n/index.js";
+import accessibilityRules from "./accessibility/index.js";
+import performanceRules from "./performance/index.js";
 
 export default {
   ...i18nRules,

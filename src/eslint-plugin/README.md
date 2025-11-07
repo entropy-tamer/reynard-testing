@@ -127,10 +127,10 @@ Validates that translation keys exist in translation files.
 
 ```typescript
 // ❌ Bad - key doesn't exist in translation files
-t("nonexistent.key")
+t("nonexistent.key");
 
 // ✅ Good - key exists in translation files
-t("themes.select")
+t("themes.select");
 ```
 
 #### prefer-i18n-keys
@@ -215,8 +215,8 @@ Ensures interactive elements have proper keyboard navigation support.
 <div onClick={handleClick}>Click me</div>
 
 // ✅ Good
-<div 
-  onClick={handleClick} 
+<div
+  onClick={handleClick}
   onKeyDown={handleKeyDown}
   tabIndex={0}
   role="button"
@@ -324,18 +324,8 @@ The plugin works seamlessly with VSCode's ESLint extension. Add this to your `.v
     "extensions": [".js", ".jsx", ".ts", ".tsx"],
     "overrideConfigFile": "eslint.config.js"
   },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
-  "eslint.probe": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ]
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.probe": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
 }
 ```
 
@@ -348,7 +338,7 @@ The plugin works seamlessly with VSCode's ESLint extension. Add this to your `.v
 Make sure your `translationFiles` patterns match your project structure:
 
 ```javascript
-translationFiles: ["src/lang/**/*.ts", "packages/*/src/lang/**/*.ts"]
+translationFiles: ["src/lang/**/*.ts", "packages/*/src/lang/**/*.ts"];
 ```
 
 #### Performance issues
@@ -368,7 +358,7 @@ ignorePatterns: [
   "^[A-Z_]+$", // CONSTANTS
   "^[0-9]+$", // numbers
   "^(id|class|type|name)$", // technical terms
-]
+];
 ```
 
 ### Debug Mode
@@ -398,5 +388,3 @@ To contribute to the plugin:
 ## License
 
 MIT License - see the main Reynard project for details.
-
-

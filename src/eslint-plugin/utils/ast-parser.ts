@@ -3,9 +3,9 @@
  * Provides robust TypeScript/JSX parsing and node traversal utilities
  */
 
-import { parse } from '@typescript-eslint/parser';
-import type { TSESTree } from '@typescript-eslint/types';
-import type { ASTParserOptions, NodeFinderOptions } from '../types.js';
+import { parse } from "@typescript-eslint/parser";
+import type { TSESTree } from "@typescript-eslint/types";
+import type { ASTParserOptions, NodeFinderOptions } from "../types.js";
 
 // ============================================================================
 // Core AST Parsing Functions
@@ -19,7 +19,7 @@ import type { ASTParserOptions, NodeFinderOptions } from '../types.js';
  */
 export function parseCode(code: string, options: ASTParserOptions = {}): TSESTree.Program {
   const defaultOptions = {
-    sourceType: 'module' as const,
+    sourceType: "module" as const,
     ecmaVersion: 2022 as any,
     jsx: true,
     ecmaFeatures: {
@@ -33,7 +33,7 @@ export function parseCode(code: string, options: ASTParserOptions = {}): TSESTre
   try {
     return parse(code, defaultOptions);
   } catch (error) {
-    throw new Error(`Failed to parse code: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(`Failed to parse code: ${error instanceof Error ? error.message : "Unknown error"}`);
   }
 }
 
@@ -57,11 +57,11 @@ export function findNodes(ast: TSESTree.Node, type: string, includeChildren = tr
         const value = (node as any)[key];
         if (Array.isArray(value)) {
           value.forEach(item => {
-            if (item && typeof item === 'object' && item.type) {
+            if (item && typeof item === "object" && item.type) {
               traverse(item);
             }
           });
-        } else if (value && typeof value === 'object' && value.type) {
+        } else if (value && typeof value === "object" && value.type) {
           traverse(value);
         }
       }
@@ -93,11 +93,11 @@ export function findNodesWithOptions(ast: TSESTree.Node, options: NodeFinderOpti
         const value = (node as any)[key];
         if (Array.isArray(value)) {
           value.forEach(item => {
-            if (item && typeof item === 'object' && item.type) {
+            if (item && typeof item === "object" && item.type) {
               traverse(item);
             }
           });
-        } else if (value && typeof value === 'object' && value.type) {
+        } else if (value && typeof value === "object" && value.type) {
           traverse(value);
         }
       }
@@ -116,7 +116,7 @@ export function findNodesWithOptions(ast: TSESTree.Node, options: NodeFinderOpti
  */
 export function getNodeText(node: TSESTree.Node, sourceCode: string): string {
   if (!node.range) {
-    return '';
+    return "";
   }
 
   const [start, end] = node.range;
@@ -150,15 +150,15 @@ export function getNodeLocation(node: TSESTree.Node, _sourceCode: string): { lin
  * @returns True if the node is a SolidJS component
  */
 export function isSolidJSComponent(node: TSESTree.Node): boolean {
-  if (node.type !== 'JSXElement') {
+  if (node.type !== "JSXElement") {
     return false;
   }
 
   const jsxElement = node as TSESTree.JSXElement;
   const openingElement = jsxElement.openingElement;
-  
+
   // Check for SolidJS component patterns
-  if (openingElement.name.type === 'JSXIdentifier') {
+  if (openingElement.name.type === "JSXIdentifier") {
     const name = openingElement.name.name;
     // SolidJS components typically start with uppercase
     return /^[A-Z]/.test(name);
@@ -173,15 +173,15 @@ export function isSolidJSComponent(node: TSESTree.Node): boolean {
  * @returns True if the node is a SolidJS signal
  */
 export function isSolidJSSignal(node: TSESTree.Node): boolean {
-  if (node.type !== 'CallExpression') {
+  if (node.type !== "CallExpression") {
     return false;
   }
 
   const callExpression = node as TSESTree.CallExpression;
-  
-  if (callExpression.callee.type === 'Identifier') {
+
+  if (callExpression.callee.type === "Identifier") {
     const name = callExpression.callee.name;
-    return ['createSignal', 'createMemo', 'createEffect', 'createResource'].includes(name);
+    return ["createSignal", "createMemo", "createEffect", "createResource"].includes(name);
   }
 
   return false;
@@ -196,7 +196,7 @@ export function extractJSXProps(node: TSESTree.JSXElement): string[] {
   const props: string[] = [];
 
   for (const attribute of node.openingElement.attributes) {
-    if (attribute.type === 'JSXAttribute' && attribute.name.type === 'JSXIdentifier') {
+    if (attribute.type === "JSXAttribute" && attribute.name.type === "JSXIdentifier") {
       props.push(attribute.name.name);
     }
   }
@@ -255,21 +255,23 @@ export function isHardcodedString(text: string, minLength = 3, ignorePatterns: s
  * @returns Translation key if found, null otherwise
  */
 export function extractTranslationKey(node: TSESTree.CallExpression): string | null {
-  if (node.callee.type === 'Identifier' && node.callee.name === 't') {
-    if (node.arguments.length > 0 && node.arguments[0].type === 'Literal') {
+  if (node.callee.type === "Identifier" && node.callee.name === "t") {
+    if (node.arguments.length > 0 && node.arguments[0].type === "Literal") {
       const arg = node.arguments[0] as TSESTree.Literal;
-      if (typeof arg.value === 'string') {
+      if (typeof arg.value === "string") {
         return arg.value;
       }
     }
   }
 
-  if (node.callee.type === 'MemberExpression' && 
-      node.callee.property.type === 'Identifier' && 
-      node.callee.property.name === 't') {
-    if (node.arguments.length > 0 && node.arguments[0].type === 'Literal') {
+  if (
+    node.callee.type === "MemberExpression" &&
+    node.callee.property.type === "Identifier" &&
+    node.callee.property.name === "t"
+  ) {
+    if (node.arguments.length > 0 && node.arguments[0].type === "Literal") {
       const arg = node.arguments[0] as TSESTree.Literal;
-      if (typeof arg.value === 'string') {
+      if (typeof arg.value === "string") {
         return arg.value;
       }
     }
@@ -289,9 +291,7 @@ export function extractTranslationKey(node: TSESTree.CallExpression): string | n
  */
 export function hasAltAttribute(node: TSESTree.JSXElement): boolean {
   for (const attribute of node.openingElement.attributes) {
-    if (attribute.type === 'JSXAttribute' && 
-        attribute.name.type === 'JSXIdentifier' && 
-        attribute.name.name === 'alt') {
+    if (attribute.type === "JSXAttribute" && attribute.name.type === "JSXIdentifier" && attribute.name.name === "alt") {
       return true;
     }
   }
@@ -305,10 +305,8 @@ export function hasAltAttribute(node: TSESTree.JSXElement): boolean {
  */
 export function getAltAttributeValue(node: TSESTree.JSXElement): string | null {
   for (const attribute of node.openingElement.attributes) {
-    if (attribute.type === 'JSXAttribute' && 
-        attribute.name.type === 'JSXIdentifier' && 
-        attribute.name.name === 'alt') {
-      if (attribute.value && attribute.value.type === 'Literal') {
+    if (attribute.type === "JSXAttribute" && attribute.name.type === "JSXIdentifier" && attribute.name.name === "alt") {
+      if (attribute.value && attribute.value.type === "Literal") {
         return attribute.value.value as string;
       }
     }
@@ -325,9 +323,11 @@ export function getAriaAttributes(node: TSESTree.JSXElement): string[] {
   const ariaAttributes: string[] = [];
 
   for (const attribute of node.openingElement.attributes) {
-    if (attribute.type === 'JSXAttribute' && 
-        attribute.name.type === 'JSXIdentifier' && 
-        attribute.name.name.startsWith('aria-')) {
+    if (
+      attribute.type === "JSXAttribute" &&
+      attribute.name.type === "JSXIdentifier" &&
+      attribute.name.name.startsWith("aria-")
+    ) {
       ariaAttributes.push(attribute.name.name);
     }
   }
@@ -345,9 +345,9 @@ export function getAriaAttributes(node: TSESTree.JSXElement): string[] {
  * @returns True if the call is a memoization function
  */
 export function isMemoizationCall(node: TSESTree.CallExpression): boolean {
-  if (node.callee.type === 'Identifier') {
+  if (node.callee.type === "Identifier") {
     const name = node.callee.name;
-    return ['createMemo', 'createEffect', 'createResource'].includes(name);
+    return ["createMemo", "createEffect", "createResource"].includes(name);
   }
   return false;
 }
@@ -360,11 +360,10 @@ export function isMemoizationCall(node: TSESTree.CallExpression): boolean {
 export function mightCauseRerenders(node: TSESTree.JSXElement): boolean {
   // Check for inline functions in props
   for (const attribute of node.openingElement.attributes) {
-    if (attribute.type === 'JSXAttribute' && attribute.value) {
-      if (attribute.value.type === 'JSXExpressionContainer') {
+    if (attribute.type === "JSXAttribute" && attribute.value) {
+      if (attribute.value.type === "JSXExpressionContainer") {
         const expression = attribute.value.expression;
-        if (expression.type === 'ArrowFunctionExpression' || 
-            expression.type === 'FunctionExpression') {
+        if (expression.type === "ArrowFunctionExpression" || expression.type === "FunctionExpression") {
           return true;
         }
       }

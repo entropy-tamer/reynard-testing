@@ -3,10 +3,10 @@
  * Ensures interactive elements have proper keyboard navigation support
  */
 
-import type { Rule } from 'eslint';
-import type { TSESTree } from '@typescript-eslint/types';
-import type { AccessibilityRuleOptions } from '../../types.js';
-// import { 
+import type { Rule } from "eslint";
+import type { TSESTree } from "@typescript-eslint/types";
+import type { AccessibilityRuleOptions } from "../../types.js";
+// import {
 //   getNodeText,
 //   getNodeLocation
 // } from '../../utils'; // TODO: Implement node text and location utilities
@@ -15,45 +15,29 @@ import type { AccessibilityRuleOptions } from '../../types.js';
 // Interactive Elements Data
 // ============================================================================
 
-const INTERACTIVE_ELEMENTS = new Set([
-  'button',
-  'a',
-  'input',
-  'select',
-  'textarea',
-  'details',
-  'summary',
-]);
+const INTERACTIVE_ELEMENTS = new Set(["button", "a", "input", "select", "textarea", "details", "summary"]);
 
 const INTERACTIVE_ROLES = new Set([
-  'button',
-  'link',
-  'menuitem',
-  'tab',
-  'option',
-  'checkbox',
-  'radio',
-  'switch',
-  'slider',
-  'combobox',
-  'textbox',
-  'searchbox',
-  'spinbutton',
-  'treeitem',
-  'gridcell',
-  'columnheader',
-  'rowheader',
+  "button",
+  "link",
+  "menuitem",
+  "tab",
+  "option",
+  "checkbox",
+  "radio",
+  "switch",
+  "slider",
+  "combobox",
+  "textbox",
+  "searchbox",
+  "spinbutton",
+  "treeitem",
+  "gridcell",
+  "columnheader",
+  "rowheader",
 ]);
 
-const ELEMENTS_WITH_DEFAULT_KEYBOARD = new Set([
-  'button',
-  'a',
-  'input',
-  'select',
-  'textarea',
-  'details',
-  'summary',
-]);
+const ELEMENTS_WITH_DEFAULT_KEYBOARD = new Set(["button", "a", "input", "select", "textarea", "details", "summary"]);
 
 // ============================================================================
 // Rule Definition
@@ -61,29 +45,29 @@ const ELEMENTS_WITH_DEFAULT_KEYBOARD = new Set([
 
 export const keyboardNavigation: Rule.RuleModule = {
   meta: {
-    type: 'problem',
+    type: "problem",
     docs: {
-      description: 'Ensure interactive elements have proper keyboard navigation support',
-      category: 'Accessibility',
+      description: "Ensure interactive elements have proper keyboard navigation support",
+      category: "Accessibility",
       recommended: true,
-      url: 'https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/accessibility/keyboard-navigation.ts',
+      url: "https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/accessibility/keyboard-navigation.ts",
     },
-    fixable: 'code',
+    fixable: "code",
     schema: [
       {
-        type: 'object',
+        type: "object",
         properties: {
           enabled: {
-            type: 'boolean',
+            type: "boolean",
             default: true,
           },
           checkKeyboard: {
-            type: 'boolean',
+            type: "boolean",
             default: true,
           },
           ignorePatterns: {
-            type: 'array',
-            items: { type: 'string' },
+            type: "array",
+            items: { type: "string" },
             default: [],
           },
         },
@@ -91,17 +75,18 @@ export const keyboardNavigation: Rule.RuleModule = {
       },
     ],
     messages: {
-      missingTabIndex: 'Interactive element should have tabIndex attribute for keyboard navigation',
+      missingTabIndex: "Interactive element should have tabIndex attribute for keyboard navigation",
       invalidTabIndex: 'Interactive element should have tabIndex="0" or tabIndex="-1"',
-      missingKeyboardHandler: 'Interactive element should have keyboard event handlers (onKeyDown, onKeyPress, onKeyUp)',
-      missingFocusHandler: 'Interactive element should have focus event handlers (onFocus, onBlur)',
-      nonInteractiveWithTabIndex: 'Non-interactive element should not have tabIndex attribute',
-      missingRole: 'Interactive element should have appropriate ARIA role',
+      missingKeyboardHandler:
+        "Interactive element should have keyboard event handlers (onKeyDown, onKeyPress, onKeyUp)",
+      missingFocusHandler: "Interactive element should have focus event handlers (onFocus, onBlur)",
+      nonInteractiveWithTabIndex: "Non-interactive element should not have tabIndex attribute",
+      missingRole: "Interactive element should have appropriate ARIA role",
     },
   },
 
   create(context: Rule.RuleContext): Rule.RuleListener {
-    const options = context.options[0] as AccessibilityRuleOptions || {};
+    const options = (context.options[0] as AccessibilityRuleOptions) || {};
     const enabled = options.enabled !== false;
     const checkKeyboard = options.checkKeyboard !== false;
     const ignorePatterns = options.ignorePatterns || [];
@@ -121,11 +106,12 @@ export const keyboardNavigation: Rule.RuleModule = {
     function shouldIgnoreElement(node: TSESTree.JSXElement): boolean {
       // Check for ignore patterns in className or other attributes
       for (const attribute of node.openingElement.attributes) {
-        if (attribute.type === 'JSXAttribute' && 
-            attribute.name.type === 'JSXIdentifier' && 
-            attribute.name.name === 'className') {
-          if (attribute.value && attribute.value.type === 'Literal' && 
-              typeof attribute.value.value === 'string') {
+        if (
+          attribute.type === "JSXAttribute" &&
+          attribute.name.type === "JSXIdentifier" &&
+          attribute.name.name === "className"
+        ) {
+          if (attribute.value && attribute.value.type === "Literal" && typeof attribute.value.value === "string") {
             const className = attribute.value.value;
             for (const pattern of ignorePatterns) {
               if (new RegExp(pattern).test(className)) {
@@ -142,7 +128,7 @@ export const keyboardNavigation: Rule.RuleModule = {
      * Get element name
      */
     function getElementName(node: TSESTree.JSXElement): string | null {
-      if (node.openingElement.name.type === 'JSXIdentifier') {
+      if (node.openingElement.name.type === "JSXIdentifier") {
         return node.openingElement.name.name;
       }
       return null;
@@ -153,11 +139,12 @@ export const keyboardNavigation: Rule.RuleModule = {
      */
     function getAriaRole(node: TSESTree.JSXElement): string | null {
       for (const attribute of node.openingElement.attributes) {
-        if (attribute.type === 'JSXAttribute' && 
-            attribute.name.type === 'JSXIdentifier' && 
-            attribute.name.name === 'role') {
-          if (attribute.value && attribute.value.type === 'Literal' && 
-              typeof attribute.value.value === 'string') {
+        if (
+          attribute.type === "JSXAttribute" &&
+          attribute.name.type === "JSXIdentifier" &&
+          attribute.name.name === "role"
+        ) {
+          if (attribute.value && attribute.value.type === "Literal" && typeof attribute.value.value === "string") {
             return attribute.value.value;
           }
         }
@@ -170,10 +157,12 @@ export const keyboardNavigation: Rule.RuleModule = {
      */
     function getTabIndex(node: TSESTree.JSXElement): string | null {
       for (const attribute of node.openingElement.attributes) {
-        if (attribute.type === 'JSXAttribute' && 
-            attribute.name.type === 'JSXIdentifier' && 
-            attribute.name.name === 'tabIndex') {
-          if (attribute.value && attribute.value.type === 'Literal') {
+        if (
+          attribute.type === "JSXAttribute" &&
+          attribute.name.type === "JSXIdentifier" &&
+          attribute.name.name === "tabIndex"
+        ) {
+          if (attribute.value && attribute.value.type === "Literal") {
             return String(attribute.value.value);
           }
         }
@@ -185,12 +174,14 @@ export const keyboardNavigation: Rule.RuleModule = {
      * Check if element has keyboard event handlers
      */
     function hasKeyboardHandlers(node: TSESTree.JSXElement): boolean {
-      const keyboardEvents = ['onKeyDown', 'onKeyPress', 'onKeyUp'];
-      
+      const keyboardEvents = ["onKeyDown", "onKeyPress", "onKeyUp"];
+
       for (const attribute of node.openingElement.attributes) {
-        if (attribute.type === 'JSXAttribute' && 
-            attribute.name.type === 'JSXIdentifier' && 
-            keyboardEvents.includes(attribute.name.name)) {
+        if (
+          attribute.type === "JSXAttribute" &&
+          attribute.name.type === "JSXIdentifier" &&
+          keyboardEvents.includes(attribute.name.name)
+        ) {
           return true;
         }
       }
@@ -201,12 +192,14 @@ export const keyboardNavigation: Rule.RuleModule = {
      * Check if element has focus event handlers
      */
     function hasFocusHandlers(node: TSESTree.JSXElement): boolean {
-      const focusEvents = ['onFocus', 'onBlur'];
-      
+      const focusEvents = ["onFocus", "onBlur"];
+
       for (const attribute of node.openingElement.attributes) {
-        if (attribute.type === 'JSXAttribute' && 
-            attribute.name.type === 'JSXIdentifier' && 
-            focusEvents.includes(attribute.name.name)) {
+        if (
+          attribute.type === "JSXAttribute" &&
+          attribute.name.type === "JSXIdentifier" &&
+          focusEvents.includes(attribute.name.name)
+        ) {
           return true;
         }
       }
@@ -252,9 +245,9 @@ export const keyboardNavigation: Rule.RuleModule = {
     function reportMissingTabIndex(node: TSESTree.JSXElement) {
       context.report({
         node,
-        messageId: 'missingTabIndex',
-        fix: (fixer) => {
-          return fixer.insertTextAfter(node.openingElement.name, ' tabIndex={0}');
+        messageId: "missingTabIndex",
+        fix: fixer => {
+          return fixer.insertTextAfter(node.openingElement.name, " tabIndex={0}");
         },
       });
     }
@@ -265,7 +258,7 @@ export const keyboardNavigation: Rule.RuleModule = {
     function reportInvalidTabIndex(node: TSESTree.JSXElement) {
       context.report({
         node,
-        messageId: 'invalidTabIndex',
+        messageId: "invalidTabIndex",
       });
     }
 
@@ -275,7 +268,7 @@ export const keyboardNavigation: Rule.RuleModule = {
     function reportMissingKeyboardHandlers(node: TSESTree.JSXElement) {
       context.report({
         node,
-        messageId: 'missingKeyboardHandler',
+        messageId: "missingKeyboardHandler",
       });
     }
 
@@ -285,7 +278,7 @@ export const keyboardNavigation: Rule.RuleModule = {
     function reportMissingFocusHandlers(node: TSESTree.JSXElement) {
       context.report({
         node,
-        messageId: 'missingFocusHandler',
+        messageId: "missingFocusHandler",
       });
     }
 
@@ -295,7 +288,7 @@ export const keyboardNavigation: Rule.RuleModule = {
     function reportNonInteractiveWithTabIndex(node: TSESTree.JSXElement) {
       context.report({
         node,
-        messageId: 'nonInteractiveWithTabIndex',
+        messageId: "nonInteractiveWithTabIndex",
       });
     }
 
@@ -305,7 +298,7 @@ export const keyboardNavigation: Rule.RuleModule = {
     function reportMissingRole(node: TSESTree.JSXElement) {
       context.report({
         node,
-        messageId: 'missingRole',
+        messageId: "missingRole",
       });
     }
 
@@ -352,7 +345,7 @@ export const keyboardNavigation: Rule.RuleModule = {
         if (!hasDefaultKeyboard) {
           if (tabIndex === null) {
             reportMissingTabIndex(node);
-          } else if (tabIndex !== '0' && tabIndex !== '-1') {
+          } else if (tabIndex !== "0" && tabIndex !== "-1") {
             reportInvalidTabIndex(node);
           }
         }

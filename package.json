@@ -1,6 +1,6 @@
 {
   "name": "reynard-testing",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Testing utilities and configurations for Reynard",
   "type": "module",
   "main": "./dist/index.js",
@@ -83,9 +83,10 @@
   "dependencies": {
     "@entropy-tamer/reynard-i18n": "workspace:*",
     "@solidjs/testing-library": "0.8.10",
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/user-event": "14.6.1",
     "commander": "14.0.1",
-    "solid-js": "1.9.9"
+    "solid-js": "1.9.10"
   },
   "devDependencies": {
     "@types/eslint": "9.6.1",
@@ -107,7 +108,7 @@
     "vitest": "3.2.4"
   },
   "peerDependencies": {
-    "solid-js": "1.9.9",
+    "solid-js": "1.9.10",
     "vitest": "3.2.4"
   },
   "publishConfig": {

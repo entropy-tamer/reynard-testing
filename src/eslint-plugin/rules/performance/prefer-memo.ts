@@ -3,50 +3,50 @@
  * Suggests memoization for expensive computations
  */
 
-import type { Rule } from 'eslint';
-import type { TSESTree } from '@typescript-eslint/types';
-import type { PerformanceRuleOptions } from '../../types.js';
-import { 
-  isMemoizedExpression, 
-  isExpensiveExpression, 
-  isInComponentContext, 
+import type { Rule } from "eslint";
+import type { TSESTree } from "@typescript-eslint/types";
+import type { PerformanceRuleOptions } from "../../types.js";
+import {
+  isMemoizedExpression,
+  isExpensiveExpression,
+  isInComponentContext,
   isInsideMemoizationContext,
-  getMessageId 
-} from './prefer-memo-utils.js';
+  getMessageId,
+} from "./prefer-memo-utils.js";
 
 export const preferMemo: Rule.RuleModule = {
   meta: {
-    type: 'suggestion',
+    type: "suggestion",
     docs: {
-      description: 'Suggest memoization for expensive computations',
-      category: 'Performance',
+      description: "Suggest memoization for expensive computations",
+      category: "Performance",
       recommended: true,
-      url: 'https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/performance/prefer-memo.ts',
+      url: "https://github.com/entropy-tamer/reynard/blob/main/packages/core/testing/src/eslint-plugin/rules/performance/prefer-memo.ts",
     },
-    fixable: 'code',
+    fixable: "code",
     schema: [
       {
-        type: 'object',
+        type: "object",
         properties: {
-          enabled: { type: 'boolean', default: true },
-          checkMemoization: { type: 'boolean', default: true },
-          ignorePatterns: { type: 'array', items: { type: 'string' }, default: [] },
+          enabled: { type: "boolean", default: true },
+          checkMemoization: { type: "boolean", default: true },
+          ignorePatterns: { type: "array", items: { type: "string" }, default: [] },
         },
         additionalProperties: false,
       },
     ],
     messages: {
-      expensiveComputation: 'Expensive computation detected. Consider using createMemo for better performance',
-      arrayOperation: 'Array operation should be memoized to prevent unnecessary re-computation',
-      mathematicalOperation: 'Mathematical operation should be memoized for better performance',
-      stringOperation: 'String operation should be memoized to prevent unnecessary re-computation',
-      objectOperation: 'Object operation should be memoized for better performance',
-      suggestMemo: 'Consider wrapping this expression with createMemo',
+      expensiveComputation: "Expensive computation detected. Consider using createMemo for better performance",
+      arrayOperation: "Array operation should be memoized to prevent unnecessary re-computation",
+      mathematicalOperation: "Mathematical operation should be memoized for better performance",
+      stringOperation: "String operation should be memoized to prevent unnecessary re-computation",
+      objectOperation: "Object operation should be memoized for better performance",
+      suggestMemo: "Consider wrapping this expression with createMemo",
     },
   },
 
   create(context: Rule.RuleContext): Rule.RuleListener {
-    const options = context.options[0] as PerformanceRuleOptions || {};
+    const options = (context.options[0] as PerformanceRuleOptions) || {};
     const enabled = options.enabled !== false;
     const checkMemoization = options.checkMemoization !== false;
 
@@ -78,7 +78,7 @@ export const preferMemo: Rule.RuleModule = {
       context.report({
         node,
         messageId,
-        fix: (fixer) => fixer.replaceText(node, 'createMemo(() => expression)'),
+        fix: fixer => fixer.replaceText(node, "createMemo(() => expression)"),
       });
     };
 
@@ -86,7 +86,7 @@ export const preferMemo: Rule.RuleModule = {
       JSXExpressionContainer(node: any) {
         if (!checkMemoization) return;
         const expression = node.expression;
-        if (expression.type === 'JSXEmptyExpression' || isMemoizedExpression(expression)) return;
+        if (expression.type === "JSXEmptyExpression" || isMemoizedExpression(expression)) return;
         if (isExpensiveExpression(expression)) {
           report(expression, getMessageId(expression));
         }
@@ -97,7 +97,7 @@ export const preferMemo: Rule.RuleModule = {
         if (isMemoizedExpression(node.init)) return;
         if (!isInComponentContextCached(node)) return;
         if (isExpensiveExpression(node.init)) {
-          report(node.init, 'suggestMemo');
+          report(node.init, "suggestMemo");
         }
       },
 
@@ -106,18 +106,18 @@ export const preferMemo: Rule.RuleModule = {
         if (isMemoizedExpression(node.argument)) return;
         if (!isInComponentContextCached(node)) return;
         if (isExpensiveExpression(node.argument)) {
-          report(node.argument, 'suggestMemo');
+          report(node.argument, "suggestMemo");
         }
       },
 
       BinaryExpression(node: any) {
         if (!checkMemoization) return;
         // Early return for non-mathematical operations
-        if (!['*', '/', '%', '**'].includes(node.operator)) return;
+        if (!["*", "/", "%", "**"].includes(node.operator)) return;
         if (isMemoizedExpression(node)) return;
         if (!isInComponentContextCached(node)) return;
         if (isInsideMemoizationContextCached(node)) return;
-        report(node, 'mathematicalOperation');
+        report(node, "mathematicalOperation");
       },
     };
   },

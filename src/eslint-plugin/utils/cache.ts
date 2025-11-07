@@ -3,11 +3,11 @@
  * Provides efficient caching for loaded translations and parsed files
  */
 
-import type { CacheEntry, CacheOptions } from '../types.js';
+import type { CacheEntry, CacheOptions } from "../types.js";
 import {
   generateTranslationCacheKey as generateTranslationCacheKeyAdvanced,
-  checkTranslationFilesModified
-} from './i18n-integration.js';
+  checkTranslationFilesModified,
+} from "./i18n-integration.js";
 
 // ============================================================================
 // Generic Cache Implementation
@@ -41,7 +41,7 @@ export class RuleCache<T> {
    */
   get(key: string): T | undefined {
     const entry = this.cache.get(key);
-    
+
     if (!entry) {
       return undefined;
     }
@@ -88,7 +88,7 @@ export class RuleCache<T> {
    */
   has(key: string): boolean {
     const entry = this.cache.get(key);
-    
+
     if (!entry) {
       return false;
     }
@@ -147,7 +147,7 @@ export class RuleCache<T> {
    * Evict the oldest entry
    */
   private evictOldest(): void {
-    let oldestKey = '';
+    let oldestKey = "";
     let oldestTime = Date.now();
 
     for (const [key, entry] of this.cache.entries()) {
@@ -263,11 +263,13 @@ export class CacheManager {
   private astCache: ASTCache;
   private fileContentCache: FileContentCache;
 
-  constructor(options: {
-    translation?: CacheOptions;
-    ast?: CacheOptions;
-    fileContent?: CacheOptions;
-  } = {}) {
+  constructor(
+    options: {
+      translation?: CacheOptions;
+      ast?: CacheOptions;
+      fileContent?: CacheOptions;
+    } = {}
+  ) {
     this.translationCache = new TranslationCache(options.translation);
     this.astCache = new ASTCache(options.ast);
     this.fileContentCache = new FileContentCache(options.fileContent);
@@ -307,9 +309,9 @@ export class CacheManager {
    * Get statistics for all caches
    */
   getAllStats(): {
-    translation: ReturnType<TranslationCache['getStats']>;
-    ast: ReturnType<ASTCache['getStats']>;
-    fileContent: ReturnType<FileContentCache['getStats']>;
+    translation: ReturnType<TranslationCache["getStats"]>;
+    ast: ReturnType<ASTCache["getStats"]>;
+    fileContent: ReturnType<FileContentCache["getStats"]>;
   } {
     return {
       translation: this.translationCache.getStats(),
@@ -348,7 +350,7 @@ export const globalCacheManager = new CacheManager();
  * @returns Cache key
  */
 export function generateFileCacheKey(filePath: string, suffix?: string): string {
-  const normalizedPath = filePath.replace(/\\/g, '/');
+  const normalizedPath = filePath.replace(/\\/g, "/");
   return suffix ? `${normalizedPath}:${suffix}` : normalizedPath;
 }
 
@@ -359,7 +361,7 @@ export function generateFileCacheKey(filePath: string, suffix?: string): string 
  * @returns Cache key
  */
 export function generateTranslationCacheKey(patterns: string[], locale?: string): string {
-  const patternsKey = patterns.sort().join('|');
+  const patternsKey = patterns.sort().join("|");
   return locale ? `${patternsKey}:${locale}` : patternsKey;
 }
 
@@ -391,7 +393,7 @@ export class EnhancedTranslationCache extends TranslationCache {
   checkAndInvalidateIfModified(patterns: string[]): void {
     const cacheKey = generateTranslationCacheKeyAdvanced(patterns);
     const lastCacheTime = this.getLastCacheTime(cacheKey);
-    
+
     if (checkTranslationFilesModified(patterns, lastCacheTime)) {
       this.clear();
       this.updateCacheTime(cacheKey);
@@ -427,11 +429,13 @@ export class EnhancedTranslationCache extends TranslationCache {
 export class EnhancedCacheManager extends CacheManager {
   private enhancedTranslationCache: EnhancedTranslationCache;
 
-  constructor(options: {
-    translation?: CacheOptions;
-    ast?: CacheOptions;
-    fileContent?: CacheOptions;
-  } = {}) {
+  constructor(
+    options: {
+      translation?: CacheOptions;
+      ast?: CacheOptions;
+      fileContent?: CacheOptions;
+    } = {}
+  ) {
     super(options);
     this.enhancedTranslationCache = new EnhancedTranslationCache(options.translation);
   }

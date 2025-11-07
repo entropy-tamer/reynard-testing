@@ -22,4 +22,3 @@ export default defineConfig({
     "import.meta.env.DEV": true,
   },
 });
-

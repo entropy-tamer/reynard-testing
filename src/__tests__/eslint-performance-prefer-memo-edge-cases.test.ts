@@ -254,32 +254,21 @@ describe("prefer-memo ESLint Rule - Edge Cases", () => {
   describe("Edge Case Expressions", () => {
     it("should handle empty arrays and objects", () => {
       ruleTester.run("prefer-memo", preferMemo, {
-        valid: [
-          `<div>{[].length}</div>`,
-          `<div>{Object.keys({}).length}</div>`,
-          `<div>{''.length}</div>`,
-        ],
+        valid: [`<div>{[].length}</div>`, `<div>{Object.keys({}).length}</div>`, `<div>{''.length}</div>`],
         invalid: [],
       });
     });
 
     it("should handle null and undefined", () => {
       ruleTester.run("prefer-memo", preferMemo, {
-        valid: [
-          `<div>{null}</div>`,
-          `<div>{undefined}</div>`,
-          `<div>{data?.map(item => item.name)}</div>`,
-        ],
+        valid: [`<div>{null}</div>`, `<div>{undefined}</div>`, `<div>{data?.map(item => item.name)}</div>`],
         invalid: [],
       });
     });
 
     it("should handle template literals", () => {
       ruleTester.run("prefer-memo", preferMemo, {
-        valid: [
-          `<div>{\`Hello \${name}\`}</div>`,
-          `<div>{\`Count: \${items.length}\`}</div>`,
-        ],
+        valid: [`<div>{\`Hello \${name}\`}</div>`, `<div>{\`Count: \${items.length}\`}</div>`],
         invalid: [
           {
             code: `<div>{\`Items: \${items.map(item => item.name).join(', ')}\`}</div>`,
@@ -388,10 +377,7 @@ describe("prefer-memo ESLint Rule - Edge Cases", () => {
                 <p>{a * b}</p>
               </div>
             `,
-            errors: [
-              { messageId: "arrayOperation" },
-              { messageId: "mathematicalOperation" },
-            ],
+            errors: [{ messageId: "arrayOperation" }, { messageId: "mathematicalOperation" }],
           },
         ],
       });
@@ -401,9 +387,7 @@ describe("prefer-memo ESLint Rule - Edge Cases", () => {
   describe("TypeScript Edge Cases", () => {
     it("should handle type assertions", () => {
       ruleTester.run("prefer-memo", preferMemo, {
-        valid: [
-          `<div>{(data as string[]).length}</div>`,
-        ],
+        valid: [`<div>{(data as string[]).length}</div>`],
         invalid: [
           {
             code: `<div>{(data as string[]).map(item => item.toUpperCase())}</div>`,

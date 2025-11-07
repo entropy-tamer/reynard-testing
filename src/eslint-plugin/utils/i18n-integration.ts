@@ -3,9 +3,9 @@
  * Provides comprehensive translation file parsing and validation
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-import * as glob from 'glob';
+import * as fs from "fs";
+import * as path from "path";
+import * as glob from "glob";
 // import type { LanguageCode, Translations } from '@entropy-tamer/reynard-i18n';
 
 // Temporary type definitions until i18n package is built
@@ -58,26 +58,24 @@ export interface I18nValidationResult {
  * Find all translation files in the project
  * Supports the Reynard structure: packages/any/src/lang/locale/namespace.ts
  */
-export function findTranslationFiles(patterns: string[] = [
-  'packages/*/src/lang/**/*.ts',
-  'src/lang/**/*.ts',
-  'examples/*/src/lang/**/*.ts'
-]): string[] {
+export function findTranslationFiles(
+  patterns: string[] = ["packages/*/src/lang/**/*.ts", "src/lang/**/*.ts", "examples/*/src/lang/**/*.ts"]
+): string[] {
   const files: string[] = [];
-  
+
   for (const pattern of patterns) {
     try {
-      const matches = glob.sync(pattern, { 
+      const matches = glob.sync(pattern, {
         cwd: process.cwd(),
         absolute: true,
-        ignore: ['**/node_modules/**', '**/dist/**', '**/build/**']
+        ignore: ["**/node_modules/**", "**/dist/**", "**/build/**"],
       });
       files.push(...matches);
     } catch (error) {
       console.warn(`Failed to search pattern ${pattern}:`, error);
     }
   }
-  
+
   return [...new Set(files)]; // Remove duplicates
 }
 
@@ -86,29 +84,29 @@ export function findTranslationFiles(patterns: string[] = [
  */
 export function parseTranslationFile(filePath: string): TranslationFile | null {
   try {
-    const content = fs.readFileSync(filePath, 'utf-8');
+    const content = fs.readFileSync(filePath, "utf-8");
     const stats = fs.statSync(filePath);
-    
+
     // Extract locale and namespace from path
     const pathParts = filePath.split(path.sep);
-    const langIndex = pathParts.findIndex(part => part === 'lang');
-    
+    const langIndex = pathParts.findIndex(part => part === "lang");
+
     if (langIndex === -1 || langIndex + 2 >= pathParts.length) {
       return null;
     }
-    
+
     const locale = pathParts[langIndex + 1] as LanguageCode;
-    const namespace = pathParts[langIndex + 2].replace('.ts', '');
-    
+    const namespace = pathParts[langIndex + 2].replace(".ts", "");
+
     // Parse the TypeScript file content
     const parsedContent = parseTranslationContent(content);
-    
+
     return {
       path: filePath,
       locale,
       namespace,
       content: parsedContent,
-      lastModified: stats.mtime.getTime()
+      lastModified: stats.mtime.getTime(),
     };
   } catch (error) {
     console.warn(`Failed to parse translation file ${filePath}:`, error);
@@ -124,24 +122,24 @@ function parseTranslationContent(content: string): Record<string, any> {
   try {
     // Simple regex-based parsing for translation objects
     // This is a simplified approach - in production, you might want to use a proper TypeScript parser
-    
+
     // Look for named exports like: export const commonTranslations = { ... }
     const namedExportMatch = content.match(/export\s+const\s+(\w+)\s*=\s*\{([\s\S]*?)\};/);
     if (namedExportMatch) {
       const objectContent = namedExportMatch[2];
       return parseObjectContent(objectContent);
     }
-    
+
     // Look for default exports like: export default { ... }
     const defaultExportMatch = content.match(/export\s+default\s*\{([\s\S]*?)\};/);
     if (defaultExportMatch) {
       const objectContent = defaultExportMatch[1];
       return parseObjectContent(objectContent);
     }
-    
+
     return {};
   } catch (error) {
-    console.warn('Failed to parse translation content:', error);
+    console.warn("Failed to parse translation content:", error);
     return {};
   }
 }
@@ -152,16 +150,16 @@ function parseTranslationContent(content: string): Record<string, any> {
  */
 function parseObjectContent(objectContent: string): Record<string, any> {
   const result: Record<string, any> = {};
-  
+
   // Simple regex to match key-value pairs
   const keyValueRegex = /(\w+(?:-\w+)*)\s*:\s*["'`]([^"'`]*?)["'`]/g;
   let match;
-  
+
   while ((match = keyValueRegex.exec(objectContent)) !== null) {
     const [, key, value] = match;
     result[key] = value;
   }
-  
+
   return result;
 }
 
@@ -174,25 +172,25 @@ function parseObjectContent(objectContent: string): Record<string, any> {
  */
 export function extractTranslationKeys(file: TranslationFile): TranslationKey[] {
   const keys: TranslationKey[] = [];
-  
-  function extractKeysFromObject(obj: any, prefix = ''): void {
+
+  function extractKeysFromObject(obj: any, prefix = ""): void {
     for (const [key, value] of Object.entries(obj)) {
       const fullKey = prefix ? `${prefix}.${key}` : key;
-      
-      if (typeof value === 'string') {
+
+      if (typeof value === "string") {
         keys.push({
           key: fullKey,
           namespace: file.namespace,
           locale: file.locale,
           value,
-          file: file.path
+          file: file.path,
         });
-      } else if (typeof value === 'object' && value !== null) {
+      } else if (typeof value === "object" && value !== null) {
         extractKeysFromObject(value, fullKey);
       }
     }
   }
-  
+
   extractKeysFromObject(file.content);
   return keys;
 }
@@ -203,7 +201,7 @@ export function extractTranslationKeys(file: TranslationFile): TranslationKey[] 
 export function loadAllTranslationKeys(patterns?: string[]): TranslationKey[] {
   const files = findTranslationFiles(patterns);
   const allKeys: TranslationKey[] = [];
-  
+
   for (const filePath of files) {
     const file = parseTranslationFile(filePath);
     if (file) {
@@ -211,7 +209,7 @@ export function loadAllTranslationKeys(patterns?: string[]): TranslationKey[] {
       allKeys.push(...keys);
     }
   }
-  
+
   return allKeys;
 }
 
@@ -226,13 +224,13 @@ export function hasTranslationKey(key: string, translationKeys: TranslationKey[]
  * Find similar translation keys for suggestions
  */
 export function findSimilarKeys(key: string, translationKeys: TranslationKey[], maxResults = 5): string[] {
-  const keyParts = key.toLowerCase().split('.');
+  const keyParts = key.toLowerCase().split(".");
   const similar: { key: string; score: number }[] = [];
-  
+
   for (const tk of translationKeys) {
-    const tkParts = tk.key.toLowerCase().split('.');
+    const tkParts = tk.key.toLowerCase().split(".");
     let score = 0;
-    
+
     // Exact match
     if (tk.key === key) {
       score = 100;
@@ -240,12 +238,12 @@ export function findSimilarKeys(key: string, translationKeys: TranslationKey[], 
     // Same namespace
     else if (keyParts[0] === tkParts[0]) {
       score += 50;
-      
+
       // Similar key name
       if (keyParts.length > 1 && tkParts.length > 1) {
         const keyName = keyParts[1];
         const tkName = tkParts[1];
-        
+
         if (keyName === tkName) {
           score += 30;
         } else if (keyName.includes(tkName) || tkName.includes(keyName)) {
@@ -253,12 +251,12 @@ export function findSimilarKeys(key: string, translationKeys: TranslationKey[], 
         }
       }
     }
-    
+
     if (score > 0) {
       similar.push({ key: tk.key, score });
     }
   }
-  
+
   return similar
     .sort((a, b) => b.score - a.score)
     .slice(0, maxResults)
@@ -319,24 +317,24 @@ export function validateTranslationConsistency(translationKeys: TranslationKey[]
     warnings: [],
     missingKeys: [],
     unusedKeys: [],
-    inconsistentKeys: []
+    inconsistentKeys: [],
   };
-  
+
   const namespaces = getAvailableNamespaces(translationKeys);
   const locales = getAvailableLocales(translationKeys);
-  
+
   // Check for missing keys across locales
   for (const namespace of namespaces) {
     const namespaceKeys = getKeysForNamespace(namespace, translationKeys);
     const keysByLocale = new Map<LanguageCode, Set<string>>();
-    
+
     for (const tk of namespaceKeys) {
       if (!keysByLocale.has(tk.locale)) {
         keysByLocale.set(tk.locale, new Set());
       }
       keysByLocale.get(tk.locale)!.add(tk.key);
     }
-    
+
     // Find missing keys
     const allKeys = new Set<string>();
     for (const keys of keysByLocale.values()) {
@@ -344,7 +342,7 @@ export function validateTranslationConsistency(translationKeys: TranslationKey[]
         allKeys.add(key);
       }
     }
-    
+
     for (const locale of locales) {
       const localeKeys = keysByLocale.get(locale) || new Set();
       for (const key of allKeys) {
@@ -355,7 +353,7 @@ export function validateTranslationConsistency(translationKeys: TranslationKey[]
       }
     }
   }
-  
+
   return result;
 }
 
@@ -363,11 +361,11 @@ export function validateTranslationConsistency(translationKeys: TranslationKey[]
  * Check if a key follows the expected namespace pattern
  */
 export function validateKeyFormat(key: string, expectedNamespaces: string[]): boolean {
-  const parts = key.split('.');
+  const parts = key.split(".");
   if (parts.length < 2) {
     return false;
   }
-  
+
   const namespace = parts[0];
   return expectedNamespaces.includes(namespace);
 }
@@ -381,7 +379,7 @@ export function validateKeyFormat(key: string, expectedNamespaces: string[]): bo
  */
 export function generateTranslationCacheKey(patterns: string[]): string {
   const sortedPatterns = patterns.sort();
-  return `translation-files:${sortedPatterns.join(',')}`;
+  return `translation-files:${sortedPatterns.join(",")}`;
 }
 
 /**
@@ -389,7 +387,7 @@ export function generateTranslationCacheKey(patterns: string[]): string {
  */
 export function checkTranslationFilesModified(patterns: string[], lastCacheTime: number): boolean {
   const files = findTranslationFiles(patterns);
-  
+
   for (const filePath of files) {
     try {
       const stats = fs.statSync(filePath);
@@ -401,7 +399,7 @@ export function checkTranslationFilesModified(patterns: string[], lastCacheTime:
       return true;
     }
   }
-  
+
   return false;
 }
 
@@ -414,21 +412,21 @@ export function checkTranslationFilesModified(patterns: string[], lastCacheTime:
  */
 export function convertToReynardTranslations(translationKeys: TranslationKey[]): Partial<Translations> {
   const result: Partial<Translations> = {};
-  
+
   for (const tk of translationKeys) {
     const namespace = tk.namespace as keyof Translations;
     if (!result[namespace]) {
       result[namespace] = {} as any;
     }
-    
+
     // Convert dot notation to nested object
-    const keyParts = tk.key.split('.');
+    const keyParts = tk.key.split(".");
     if (keyParts.length > 1) {
       const keyName = keyParts[1];
       (result[namespace] as any)[keyName] = tk.value;
     }
   }
-  
+
   return result;
 }
 
@@ -442,20 +440,20 @@ export function validateAgainstReynardTypes(translationKeys: TranslationKey[]): 
     warnings: [],
     missingKeys: [],
     unusedKeys: [],
-    inconsistentKeys: []
+    inconsistentKeys: [],
   };
-  
+
   // This would integrate with the actual Reynard type system
   // For now, we'll do basic validation
-  
+
   const namespaces = getAvailableNamespaces(translationKeys);
-  const expectedNamespaces = ['common', 'themes', 'core', 'components', 'gallery', 'charts', 'auth', 'chat', 'monaco'];
-  
+  const expectedNamespaces = ["common", "themes", "core", "components", "gallery", "charts", "auth", "chat", "monaco"];
+
   for (const namespace of namespaces) {
     if (!expectedNamespaces.includes(namespace)) {
       result.warnings.push(`Unknown namespace: ${namespace}`);
     }
   }
-  
+
   return result;
 }

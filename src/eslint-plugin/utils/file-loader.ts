@@ -3,17 +3,17 @@
  * Provides robust file system operations and translation file parsing
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-import * as glob from 'glob';
-import type { TranslationFile } from '../types.js';
+import * as fs from "fs";
+import * as path from "path";
+import * as glob from "glob";
+import type { TranslationFile } from "../types.js";
 import {
   findTranslationFiles as findTranslationFilesAdvanced,
   parseTranslationFile,
   loadAllTranslationKeys,
   hasTranslationKey as hasTranslationKeyAdvanced,
-  extractTranslationKeys as extractTranslationKeysAdvanced
-} from './i18n-integration.js';
+  extractTranslationKeys as extractTranslationKeysAdvanced,
+} from "./i18n-integration.js";
 
 // ============================================================================
 // File System Utilities
@@ -39,9 +39,9 @@ export function fileExists(filePath: string): boolean {
  */
 export function readFileSync(filePath: string): string {
   try {
-    return fs.readFileSync(filePath, 'utf-8');
+    return fs.readFileSync(filePath, "utf-8");
   } catch (error) {
-    throw new Error(`Failed to read file ${filePath}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(`Failed to read file ${filePath}: ${error instanceof Error ? error.message : "Unknown error"}`);
   }
 }
 
@@ -66,7 +66,7 @@ export function getFileStats(filePath: string): fs.Stats | null {
  */
 export function findFiles(patterns: string[], options: any = {}): string[] {
   const files: string[] = [];
-  
+
   for (const pattern of patterns) {
     try {
       const matches = glob.sync(pattern, {
@@ -76,10 +76,10 @@ export function findFiles(patterns: string[], options: any = {}): string[] {
       });
       files.push(...matches);
     } catch (error) {
-      console.warn(`Failed to match pattern ${pattern}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.warn(`Failed to match pattern ${pattern}: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
   }
-  
+
   return [...new Set(files)]; // Remove duplicates
 }
 
@@ -101,7 +101,7 @@ export async function loadTranslationFiles(patterns: string[]): Promise<Translat
       const content = readFileSync(filePath);
       const parsed = parseTranslationModule(content);
       const stats = getFileStats(filePath);
-      
+
       // Extract locale from path (e.g., /path/to/en/common.ts -> en)
       const locale = extractLocaleFromPath(filePath);
       const namespace = extractNamespaceFromPath(filePath);
@@ -114,7 +114,9 @@ export async function loadTranslationFiles(patterns: string[]): Promise<Translat
         lastModified: stats?.mtime.getTime() || Date.now(),
       });
     } catch (error) {
-      console.warn(`Failed to load translation file ${filePath}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.warn(
+        `Failed to load translation file ${filePath}: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     }
   }
 
@@ -135,7 +137,7 @@ export function loadTranslationFilesSync(patterns: string[]): TranslationFile[] 
       const content = readFileSync(filePath);
       const parsed = parseTranslationModule(content);
       const stats = getFileStats(filePath);
-      
+
       // Extract locale from path (e.g., /path/to/en/common.ts -> en)
       const locale = extractLocaleFromPath(filePath);
       const namespace = extractNamespaceFromPath(filePath);
@@ -148,7 +150,9 @@ export function loadTranslationFilesSync(patterns: string[]): TranslationFile[] 
         lastModified: stats?.mtime.getTime() || Date.now(),
       });
     } catch (error) {
-      console.warn(`Failed to load translation file ${filePath}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.warn(
+        `Failed to load translation file ${filePath}: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     }
   }
 
@@ -175,7 +179,7 @@ export function parseTranslationModule(content: string): Record<string, any> {
     const objectString = exportMatch[1];
     return parseNestedObject(objectString);
   } catch (error) {
-    console.warn(`Failed to parse translation module: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.warn(`Failed to parse translation module: ${error instanceof Error ? error.message : "Unknown error"}`);
     return {};
   }
 }
@@ -187,7 +191,7 @@ export function parseTranslationModule(content: string): Record<string, any> {
  */
 export function parseNestedObject(objectString: string): Record<string, any> {
   const result: Record<string, any> = {};
-  
+
   try {
     // Simple regex-based parsing for translation objects
     // This handles the most common patterns in translation files
@@ -196,25 +200,25 @@ export function parseNestedObject(objectString: string): Record<string, any> {
 
     while ((match = keyValueRegex.exec(objectString)) !== null) {
       const [, key, value] = match;
-      
+
       if (value.startsWith('"') || value.startsWith("'")) {
         // String value
         result[key] = value.slice(1, -1);
-      } else if (value.startsWith('{')) {
+      } else if (value.startsWith("{")) {
         // Nested object
         result[key] = parseNestedObject(value);
-      } else if (value === 'true') {
+      } else if (value === "true") {
         result[key] = true;
-      } else if (value === 'false') {
+      } else if (value === "false") {
         result[key] = false;
-      } else if (value === 'null') {
+      } else if (value === "null") {
         result[key] = null;
       } else if (!isNaN(Number(value))) {
         result[key] = Number(value);
       }
     }
   } catch (error) {
-    console.warn(`Failed to parse nested object: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    console.warn(`Failed to parse nested object: ${error instanceof Error ? error.message : "Unknown error"}`);
   }
 
   return result;
@@ -231,11 +235,11 @@ export function parseNestedObject(objectString: string): Record<string, any> {
  * @returns True if key exists
  */
 export function hasTranslationKey(translations: Record<string, any>, key: string): boolean {
-  const parts = key.split('.');
+  const parts = key.split(".");
   let current = translations;
 
   for (const part of parts) {
-    if (current && typeof current === 'object' && part in current) {
+    if (current && typeof current === "object" && part in current) {
       current = current[part];
     } else {
       return false;
@@ -252,18 +256,18 @@ export function hasTranslationKey(translations: Record<string, any>, key: string
  * @returns Translation value or null
  */
 export function getTranslationValue(translations: Record<string, any>, key: string): string | null {
-  const parts = key.split('.');
+  const parts = key.split(".");
   let current = translations;
 
   for (const part of parts) {
-    if (current && typeof current === 'object' && part in current) {
+    if (current && typeof current === "object" && part in current) {
       current = current[part];
     } else {
       return null;
     }
   }
 
-  return typeof current === 'string' ? current : null;
+  return typeof current === "string" ? current : null;
 }
 
 /**
@@ -272,15 +276,15 @@ export function getTranslationValue(translations: Record<string, any>, key: stri
  * @param prefix - Key prefix
  * @returns Array of all translation keys
  */
-export function extractTranslationKeys(translations: Record<string, any>, prefix = ''): string[] {
+export function extractTranslationKeys(translations: Record<string, any>, prefix = ""): string[] {
   const keys: string[] = [];
 
   for (const [key, value] of Object.entries(translations)) {
     const fullKey = prefix ? `${prefix}.${key}` : key;
 
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       keys.push(fullKey);
-    } else if (typeof value === 'object' && value !== null) {
+    } else if (typeof value === "object" && value !== null) {
       keys.push(...extractTranslationKeys(value, fullKey));
     }
   }
@@ -299,23 +303,23 @@ export function extractTranslationKeys(translations: Record<string, any>, prefix
  */
 export function extractLocaleFromPath(filePath: string): string {
   const pathParts = filePath.split(path.sep);
-  
+
   // Look for common locale patterns
   for (let i = pathParts.length - 1; i >= 0; i--) {
     const part = pathParts[i];
-    
+
     // Check if it's a locale directory (e.g., en, fr, de)
     if (part.length === 2 && /^[a-z]{2}$/.test(part)) {
       return part;
     }
-    
+
     // Check for locale with country (e.g., en-US, pt-BR)
     if (part.length === 5 && /^[a-z]{2}-[A-Z]{2}$/.test(part)) {
       return part;
     }
   }
-  
-  return 'en'; // Default to English
+
+  return "en"; // Default to English
 }
 
 /**
@@ -325,12 +329,12 @@ export function extractLocaleFromPath(filePath: string): string {
  */
 export function extractNamespaceFromPath(filePath: string): string {
   const fileName = path.basename(filePath, path.extname(filePath));
-  
+
   // Common namespace patterns
-  if (fileName === 'index') {
-    return 'common';
+  if (fileName === "index") {
+    return "common";
   }
-  
+
   return fileName;
 }
 
@@ -343,7 +347,7 @@ export function resolveFilePath(filePath: string): string {
   if (path.isAbsolute(filePath)) {
     return filePath;
   }
-  
+
   return path.resolve(process.cwd(), filePath);
 }
 
@@ -358,10 +362,10 @@ export function resolveFilePath(filePath: string): string {
  * @returns Array of translation file paths
  */
 export function findTranslationFiles(directory: string, locale?: string): string[] {
-  const patterns = locale 
+  const patterns = locale
     ? [`${directory}/**/${locale}/**/*.ts`, `${directory}/**/${locale}/**/*.js`]
     : [`${directory}/**/*.ts`, `${directory}/**/*.js`];
-  
+
   return findFiles(patterns);
 }
 
@@ -378,7 +382,7 @@ export function getTranslationFileInfo(filePath: string): {
 } {
   const exists = fileExists(filePath);
   const stats = exists ? getFileStats(filePath) : null;
-  
+
   return {
     locale: extractLocaleFromPath(filePath),
     namespace: extractNamespaceFromPath(filePath),
@@ -433,21 +437,23 @@ export function hasTranslationKeyEnhanced(key: string, patterns: string[]): bool
  * @returns Translation key if found, null otherwise
  */
 export function extractTranslationKeyEnhanced(node: any): string | null {
-  if (node.callee.type === 'Identifier' && node.callee.name === 't') {
-    if (node.arguments.length > 0 && node.arguments[0].type === 'Literal') {
+  if (node.callee.type === "Identifier" && node.callee.name === "t") {
+    if (node.arguments.length > 0 && node.arguments[0].type === "Literal") {
       const arg = node.arguments[0];
-      if (typeof arg.value === 'string') {
+      if (typeof arg.value === "string") {
         return arg.value;
       }
     }
   }
 
-  if (node.callee.type === 'MemberExpression' && 
-      node.callee.property.type === 'Identifier' && 
-      node.callee.property.name === 't') {
-    if (node.arguments.length > 0 && node.arguments[0].type === 'Literal') {
+  if (
+    node.callee.type === "MemberExpression" &&
+    node.callee.property.type === "Identifier" &&
+    node.callee.property.name === "t"
+  ) {
+    if (node.arguments.length > 0 && node.arguments[0].type === "Literal") {
       const arg = node.arguments[0];
-      if (typeof arg.value === 'string') {
+      if (typeof arg.value === "string") {
         return arg.value;
       }
     }
@@ -461,7 +467,7 @@ export {
   findTranslationFilesAdvanced as findTranslationFilesReynard,
   loadAllTranslationKeys,
   hasTranslationKeyAdvanced,
-  extractTranslationKeysAdvanced
+  extractTranslationKeysAdvanced,
 };
 
 // All exports are already done above with individual export statements

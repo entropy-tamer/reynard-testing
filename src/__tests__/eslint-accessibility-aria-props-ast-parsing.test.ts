@@ -351,11 +351,7 @@ describe("aria-props ESLint Rule - AST Parsing", () => {
   describe("Self-Closing Elements", () => {
     it("should validate ARIA attributes on self-closing elements", () => {
       ruleTester.run("aria-props", ariaProps, {
-        valid: [
-          `<input aria-required="true" />`,
-          `<img aria-label="Description" />`,
-          `<br aria-hidden="true" />`,
-        ],
+        valid: [`<input aria-required="true" />`, `<img aria-label="Description" />`, `<br aria-hidden="true" />`],
         invalid: [
           {
             code: `<input aria-invalid-attr="value" />`,
@@ -386,4 +382,3 @@ describe("aria-props ESLint Rule - AST Parsing", () => {
     });
   });
 });
-
