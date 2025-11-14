@@ -182,6 +182,13 @@ export function expectElementToHaveClasses(element: Element, ...classes: string[
 }
 
 /**
+ * Assert that a DOM element has a specific class (singular, for README compatibility)
+ */
+export function expectElementToHaveClass(element: Element, className: string) {
+  expectElementToHaveClasses(element, className);
+}
+
+/**
  * Assert that a DOM element has specific text content
  */
 export function expectElementToHaveTextContent(element: Element, text: string) {

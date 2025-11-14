@@ -11,6 +11,9 @@ export * from "./mocks/index.js";
 // Main testing utilities
 export * from "./test-utils.jsx";
 
+// Assertion utilities (also exported from utils, but available from main package for convenience)
+export * from "./utils/assertion-utils.js";
+
 // Unified test setup system
 export * from "./setup/index.js";
 

@@ -126,7 +126,7 @@ npm install reynard-testing --save-dev
 
 ```typescript
 // vitest.config.ts
-import { createComponentTestConfig } from "reynard-testing/config";
+import { createComponentTestConfig } from "@entropy-tamer/reynard-testing/config";
 
 export default createComponentTestConfig("my-package");
 ```
@@ -135,7 +135,7 @@ export default createComponentTestConfig("my-package");
 
 ```typescript
 // my-component.test.tsx
-import { renderWithProviders, expectComponentToRender } from 'reynard-testing';
+import { renderWithProviders, expectComponentToRender } from '@entropy-tamer/reynard-testing';
 
 test('renders without errors', () => {
   const MyComponent = () => <div>Hello World</div>;
@@ -152,7 +152,7 @@ import {
   setupVitestDOMFixture,
   cleanupVitestDOMFixture,
   DOM_TEST_DATA,
-} from "reynard-testing/dom";
+} from "@entropy-tamer/reynard-testing/dom";
 
 describe("My Component", () => {
   beforeEach(() => {
@@ -173,7 +173,7 @@ describe("My Component", () => {
 
 ```typescript
 // playwright-test.ts
-import { createPlaywrightDOMAssertionsById, DOM_TEST_PAGE_HTML, DOM_TEST_DATA } from "reynard-testing/dom";
+import { createPlaywrightDOMAssertionsById, DOM_TEST_PAGE_HTML, DOM_TEST_DATA } from "@entropy-tamer/reynard-testing/dom";
 
 test("should test DOM elements in e2e", async ({ page }) => {
   await page.setContent(DOM_TEST_PAGE_HTML);
@@ -188,7 +188,7 @@ test("should test DOM elements in e2e", async ({ page }) => {
 
 ```typescript
 // my-test.ts
-import { mockFetch, mockLocalStorage } from "reynard-testing/mocks";
+import { mockFetch, mockLocalStorage } from "@entropy-tamer/reynard-testing/mocks";
 
 test("uses fetch", async () => {
   mockFetch.mockResolvedValueOnce({
@@ -206,7 +206,7 @@ test("uses fetch", async () => {
 ### Base Configuration
 
 ```typescript
-import { createBaseVitestConfig } from "reynard-testing/config";
+import { createBaseVitestConfig } from "@entropy-tamer/reynard-testing/config";
 
 export default createBaseVitestConfig({
   packageName: "my-package",
@@ -223,7 +223,7 @@ export default createBaseVitestConfig({
 ### Component Testing
 
 ```typescript
-import { createComponentTestConfig } from "reynard-testing/config";
+import { createComponentTestConfig } from "@entropy-tamer/reynard-testing/config";
 
 export default createComponentTestConfig("my-component-package");
 ```
@@ -231,7 +231,7 @@ export default createComponentTestConfig("my-component-package");
 ### Integration Testing
 
 ```typescript
-import { createIntegrationTestConfig } from "reynard-testing/config";
+import { createIntegrationTestConfig } from "@entropy-tamer/reynard-testing/config";
 
 export default createIntegrationTestConfig("my-integration-package");
 ```
@@ -257,7 +257,7 @@ import {
   cleanupVitestDOMFixture,
   DOM_TEST_PAGE_HTML,
   DOM_TEST_DATA,
-} from "reynard-testing/dom";
+} from "@entropy-tamer/reynard-testing/dom";
 ```
 
 ### Vitest Environment
@@ -301,7 +301,7 @@ test.describe("My E2E Tests", () => {
 #### Accessibility Testing
 
 ```typescript
-import { toHaveAccessibleName, toHaveAccessibleDescription, toHaveRole } from "reynard-testing/dom";
+import { toHaveAccessibleName, toHaveAccessibleDescription, toHaveRole } from "@entropy-tamer/reynard-testing/dom";
 
 test("should test accessibility", async () => {
   const element = await createVitestDOMAssertionsById(DOM_TEST_DATA.buttons.named);
@@ -313,7 +313,7 @@ test("should test accessibility", async () => {
 #### Performance Monitoring
 
 ```typescript
-import { measurePerformance, trackDOMMutations } from "reynard-testing/dom";
+import { measurePerformance, trackDOMMutations } from "@entropy-tamer/reynard-testing/dom";
 
 test("should monitor performance", async () => {
   const duration = await measurePerformance(async () => {
@@ -329,7 +329,7 @@ test("should monitor performance", async () => {
 #### Complex Interactions
 
 ```typescript
-import { simulateDragAndDrop, simulateKeyPress } from "reynard-testing/dom";
+import { simulateDragAndDrop, simulateKeyPress } from "@entropy-tamer/reynard-testing/dom";
 
 test("should handle complex interactions", async () => {
   const draggable = await createVitestDOMAssertionsById(DOM_TEST_DATA.interactions.dragItem);
@@ -383,7 +383,7 @@ import {
   renderWithProviders,
   renderWithTheme,
   renderWithRouter
-} from 'reynard-testing/utils';
+} from '@entropy-tamer/reynard-testing/utils';
 
 // Render with all providers
 renderWithProviders(() => <MyComponent />);
@@ -398,7 +398,7 @@ renderWithRouter(() => <MyComponent />, '/dashboard');
 ### Mock Utilities
 
 ```typescript
-import { createMockFn, createMockResponse, createMockFile } from "reynard-testing/utils";
+import { createMockFn, createMockResponse, createMockFile } from "@entropy-tamer/reynard-testing/utils";
 
 // Create mock function
 const mockFn = createMockFn();
@@ -413,7 +413,7 @@ const file = createMockFile("test.txt", "content");
 ### Assertion Utilities
 
 ```typescript
-import { expectComponentToRender, expectPromiseToResolve, expectElementToHaveClass } from "reynard-testing/utils";
+import { expectComponentToRender, expectPromiseToResolve, expectElementToHaveClass } from "@entropy-tamer/reynard-testing/utils";
 
 // Component assertions
 expectComponentToRender(MyComponent);
@@ -430,7 +430,7 @@ expectElementToHaveClass(element, "active");
 ### Browser APIs
 
 ```typescript
-import { mockFetch, mockLocalStorage, mockWebSocket } from "reynard-testing/mocks";
+import { mockFetch, mockLocalStorage, mockWebSocket } from "@entropy-tamer/reynard-testing/mocks";
 
 // Mock fetch
 mockFetch.mockResolvedValueOnce({ ok: true });
@@ -445,7 +445,7 @@ const ws = new mockWebSocket();
 ### External Libraries
 
 ```typescript
-import { mockFabric, mockD3 } from "reynard-testing/mocks";
+import { mockFabric, mockD3 } from "@entropy-tamer/reynard-testing/mocks";
 
 // Mock Fabric.js
 const canvas = new mockFabric.Canvas();
@@ -517,7 +517,7 @@ render(() => (
 
 ```typescript
 // Good: Use provided mocks
-import { mockFetch } from "reynard-testing/mocks";
+import { mockFetch } from "@entropy-tamer/reynard-testing/mocks";
 
 // Avoid: Manual fetch mocking
 global.fetch = vi.fn();
@@ -544,7 +544,7 @@ test("works", () => {
 #### 1. **Testing with Context Providers**
 
 ```typescript
-import { renderWithProviders } from 'reynard-testing';
+import { renderWithProviders } from '@entropy-tamer/reynard-testing';
 import { ReynardProvider } from 'reynard-themes';
 
 describe('ThemedComponent', () => {
@@ -585,7 +585,7 @@ describe('ThemedComponent', () => {
 
 ```typescript
 import { waitFor } from '@solidjs/testing-library';
-import { mockFetch } from 'reynard-testing/mocks';
+import { mockFetch } from '@entropy-tamer/reynard-testing/mocks';
 
 describe('AsyncComponent', () => {
   test('loads data and displays it', async () => {
@@ -949,7 +949,7 @@ import {
   mockLocalStorage,
   mockWebSocket,
   mockIntersectionObserver
-} from 'reynard-testing/mocks';
+} from '@entropy-tamer/reynard-testing/mocks';
 
 describe('Component with External Dependencies', () => {
   beforeEach(() => {
@@ -985,7 +985,7 @@ describe('Component with External Dependencies', () => {
 #### 2. **Custom Mock Factories**
 
 ```typescript
-import { createMockUser, createMockPost } from 'reynard-testing/fixtures';
+import { createMockUser, createMockPost } from '@entropy-tamer/reynard-testing/fixtures';
 
 describe('User Components', () => {
   test('renders user profile', () => {

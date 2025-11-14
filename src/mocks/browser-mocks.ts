@@ -5,27 +5,53 @@ import { vi } from "vitest";
  */
 
 /**
- * Mock localStorage
+ * Mock localStorage with proper storage implementation
  */
+const storage = new Map<string, string>();
+
 export const mockLocalStorage = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-  length: 0,
-  key: vi.fn(),
+  getItem: vi.fn((key: string) => storage.get(key) || null),
+  setItem: vi.fn((key: string, value: string) => {
+    storage.set(key, value);
+  }),
+  removeItem: vi.fn((key: string) => {
+    storage.delete(key);
+  }),
+  clear: vi.fn(() => {
+    storage.clear();
+  }),
+  get length() {
+    return storage.size;
+  },
+  key: vi.fn((index: number) => {
+    const keys = Array.from(storage.keys());
+    return keys[index] || null;
+  }),
 };
 
 /**
- * Mock sessionStorage
+ * Mock sessionStorage with proper storage implementation
  */
+const sessionStorageMap = new Map<string, string>();
+
 export const mockSessionStorage = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-  length: 0,
-  key: vi.fn(),
+  getItem: vi.fn((key: string) => sessionStorageMap.get(key) || null),
+  setItem: vi.fn((key: string, value: string) => {
+    sessionStorageMap.set(key, value);
+  }),
+  removeItem: vi.fn((key: string) => {
+    sessionStorageMap.delete(key);
+  }),
+  clear: vi.fn(() => {
+    sessionStorageMap.clear();
+  }),
+  get length() {
+    return sessionStorageMap.size;
+  },
+  key: vi.fn((index: number) => {
+    const keys = Array.from(sessionStorageMap.keys());
+    return keys[index] || null;
+  }),
 };
 
 /**
@@ -93,44 +119,64 @@ export const mockRequestAnimationFrame = vi.fn((cb: FrameRequestCallback) => {
 export const mockCancelAnimationFrame = vi.fn((id: number) => clearTimeout(id));
 
 /**
- * Mock fetch
+ * Mock fetch - prevents real network requests
  */
-export const mockFetch = vi.fn((_url?: string) =>
-  Promise.resolve({
+export const mockFetch = vi.fn().mockImplementation((_url?: string | URL | Request) => {
+  // Return a mock response that doesn't make real network requests
+  return Promise.resolve({
     ok: true,
     status: 200,
+    statusText: "OK",
     json: vi.fn().mockResolvedValue({}),
     text: vi.fn().mockResolvedValue(""),
     blob: vi.fn().mockResolvedValue(new Blob()),
     arrayBuffer: vi.fn().mockResolvedValue(new ArrayBuffer(0)),
-    formData: vi.fn().mockResolvedValue({}),
+    formData: vi.fn().mockResolvedValue(new FormData()),
     clone: vi.fn().mockReturnThis(),
-  })
-);
+    headers: new Headers(),
+    redirected: false,
+    type: "basic" as ResponseType,
+    url: typeof _url === "string" ? _url : _url instanceof URL ? _url.href : _url?.url || "",
+    body: null,
+    bodyUsed: false,
+    bytes: vi.fn().mockResolvedValue(new Uint8Array()),
+  } as unknown as Response);
+});
 
 /**
- * Mock WebSocket
+ * Mock WebSocket class
  */
-export const mockWebSocket = vi.fn().mockImplementation(() => {
+export const mockWebSocket = vi.fn().mockImplementation((url?: string) => {
   const mockWs = {
     readyState: 0, // CONNECTING
-    url: "",
+    url: url || "",
     protocol: "",
     extensions: "",
     bufferedAmount: 0,
     binaryType: "blob" as BinaryType,
-    onopen: null,
-    onclose: null,
-    onmessage: null,
-    onerror: null,
-    close: vi.fn(),
-    send: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
+    onopen: null as ((event: Event) => void) | null,
+    onclose: null as ((event: CloseEvent) => void) | null,
+    onmessage: null as ((event: MessageEvent) => void) | null,
+    onerror: null as ((event: Event) => void) | null,
+    close: vi.fn((code?: number, reason?: string) => {
+      mockWs.readyState = 3; // CLOSED
+      if (mockWs.onclose) {
+        mockWs.onclose(new CloseEvent("close", { code, reason }));
+      }
+    }),
+    send: vi.fn((_data: string | ArrayBuffer | Blob) => {
+      // Mock send implementation
+    }),
+    addEventListener: vi.fn((_type: string, _listener: EventListener) => {
+      // Store listeners for potential event dispatching
+    }),
+    removeEventListener: vi.fn((_type: string, _listener: EventListener) => {
+      // Remove listeners
+    }),
     dispatchEvent: vi.fn().mockReturnValue(true),
   } as any;
 
-  // Simulate connection
+  // Simulate connection after a short delay
   setTimeout(() => {
     mockWs.readyState = 1; // OPEN
     if (mockWs.onopen) {
@@ -140,6 +186,12 @@ export const mockWebSocket = vi.fn().mockImplementation(() => {
 
   return mockWs;
 });
+
+// Add static constants to mockWebSocket
+(mockWebSocket as any).CONNECTING = 0;
+(mockWebSocket as any).OPEN = 1;
+(mockWebSocket as any).CLOSING = 2;
+(mockWebSocket as any).CLOSED = 3;
 
 /**
  * Mock EventSource
@@ -601,8 +653,10 @@ export function setupBrowserMocks() {
  */
 export function resetBrowserMocks() {
   vi.clearAllMocks();
-  mockLocalStorage.getItem.mockReturnValue(null);
-  mockSessionStorage.getItem.mockReturnValue(null);
+  // Reset localStorage storage
+  storage.clear();
+  // Reset sessionStorage storage
+  sessionStorageMap.clear();
   mockMatchMedia.mockReturnValue({
     matches: false,
     media: "",

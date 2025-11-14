@@ -23,6 +23,10 @@
       "import": "./dist/mocks/index.js",
       "types": "./dist/mocks/index.d.ts"
     },
+    "./dom": {
+      "import": "./dist/dom/index.js",
+      "types": "./dist/dom/index.d.ts"
+    },
     "./fixtures": {
       "import": "./dist/fixtures/index.js",
       "types": "./dist/fixtures/index.d.ts"
@@ -50,7 +54,7 @@
   ],
   "scripts": {
     "dev": "vite build --watch",
-    "build": "tsc --skipLibCheck && pnpm build:eslint-plugin",
+    "build": "vite build && tsc --skipLibCheck --emitDeclarationOnly && pnpm build:eslint-plugin",
     "build:eslint-plugin": "tsc -p tsconfig.eslint-plugin.json",
     "build:types": "tsc -p tsconfig.json --emitDeclarationOnly",
     "test": "vitest run",

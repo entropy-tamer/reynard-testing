@@ -8,5 +8,5 @@
 export * from "./mock-utils.js";
 export * from "./i18n-package-orchestrator.js";
 export * from "./i18n-testing.js";
-// export * from "./assertion-utils"; // Temporarily disabled - needs custom matcher replacement
+export * from "./assertion-utils.js";
 // export * from "./test-setup"; // Deleted - functionality moved to main setup system

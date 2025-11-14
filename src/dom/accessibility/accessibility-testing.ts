@@ -818,20 +818,36 @@ export function createColorContrastTesting(
 /**
  * Asserts that an element has a specific accessible name.
  * This is crucial for screen reader users.
- * @param element The element to check.
+ * @param element The element to check (can be UnifiedDOMAssertions or HTMLElement).
  * @param expectedName The expected accessible name.
  */
-export async function toHaveAccessibleName(element: UnifiedDOMAssertions, expectedName: string): Promise<void> {
-  // In a real browser environment, this would involve querying the accessibility tree.
-  // For Happy DOM, we'll approximate based on common ARIA attributes and text content.
-  const domElement = (element.element as any).element; // Access underlying HTMLElement
+export async function toHaveAccessibleName(
+  element: UnifiedDOMAssertions | HTMLElement,
+  expectedName: string
+): Promise<void> {
+  let domElement: HTMLElement;
+  let getAttribute: (name: string) => Promise<string | null>;
+  let getTextContent: () => Promise<string>;
+
+  if (element instanceof HTMLElement) {
+    // Direct HTMLElement - create a simple wrapper
+    domElement = element;
+    getAttribute = async (name: string) => element.getAttribute(name);
+    getTextContent = async () => element.textContent || "";
+  } else {
+    // UnifiedDOMAssertions
+    domElement = (element.element as any).element;
+    getAttribute = (name: string) => element.element.getAttribute(name);
+    getTextContent = () => element.element.getTextContent();
+  }
+
   if (!domElement) {
     throw new Error("Element not found for accessible name check.");
   }
 
-  const ariaLabel = await element.element.getAttribute("aria-label");
-  const title = await element.element.getAttribute("title");
-  const textContent = await element.element.getTextContent();
+  const ariaLabel = await getAttribute("aria-label");
+  const title = await getAttribute("title");
+  const textContent = await getTextContent();
 
   // Simple approximation: check aria-label, then title, then text content
   const accessibleName = ariaLabel || title || textContent?.trim();
@@ -841,20 +857,30 @@ export async function toHaveAccessibleName(element: UnifiedDOMAssertions, expect
 
 /**
  * Asserts that an element has a specific accessible description.
- * @param element The element to check.
+ * @param element The element to check (can be UnifiedDOMAssertions or HTMLElement).
  * @param expectedDescription The expected accessible description.
  */
 export async function toHaveAccessibleDescription(
-  element: UnifiedDOMAssertions,
+  element: UnifiedDOMAssertions | HTMLElement,
   expectedDescription: string
 ): Promise<void> {
-  const domElement = (element.element as any).element; // Access underlying HTMLElement
+  let domElement: HTMLElement;
+  let getAttribute: (name: string) => Promise<string | null>;
+
+  if (element instanceof HTMLElement) {
+    domElement = element;
+    getAttribute = async (name: string) => element.getAttribute(name);
+  } else {
+    domElement = (element.element as any).element;
+    getAttribute = (name: string) => element.element.getAttribute(name);
+  }
+
   if (!domElement) {
     throw new Error("Element not found for accessible description check.");
   }
 
-  const ariaDescribedBy = await element.element.getAttribute("aria-describedby");
-  const title = await element.element.getAttribute("title");
+  const ariaDescribedBy = await getAttribute("aria-describedby");
+  const title = await getAttribute("title");
   let accessibleDescription = null;
 
   if (ariaDescribedBy) {
@@ -869,11 +895,19 @@ export async function toHaveAccessibleDescription(
 
 /**
  * Asserts that an element has a specific ARIA role.
- * @param element The element to check.
+ * @param element The element to check (can be UnifiedDOMAssertions or HTMLElement).
  * @param expectedRole The expected ARIA role.
  */
-export async function toHaveRole(element: UnifiedDOMAssertions, expectedRole: string): Promise<void> {
-  await element.toHaveAttribute("role", expectedRole);
+export async function toHaveRole(
+  element: UnifiedDOMAssertions | HTMLElement,
+  expectedRole: string
+): Promise<void> {
+  if (element instanceof HTMLElement) {
+    const role = element.getAttribute("role");
+    expect(role).toBe(expectedRole);
+  } else {
+    await element.toHaveAttribute("role", expectedRole);
+  }
 }
 
 /**
